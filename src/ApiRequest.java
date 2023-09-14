@@ -19,8 +19,11 @@ class ApiRequest{
         ap.processType="A16";
         ap.In_Domain=CodeFormats.COUN_MAP.get(countryName);
         ap.PsrType=CodeFormats.ENERGY_MAP.get(energyType);
-        ap.PeriodStart=dtf.format(LocalDateTime.now().minusHours(1));  // "202309010000" YYYYYMMDD0000
-        ap.PeriodEnd=dtf.format(LocalDateTime.now());
+
+        //API is 1 hour begind and expects time in utc. 
+        //subtract 3 hours to correct for api lag and swedish summer time.
+        ap.PeriodStart=dtf.format(LocalDateTime.now().minusHours(4));  // "202309010000" YYYYYMMDD0000
+        ap.PeriodEnd=dtf.format(LocalDateTime.now().minusHours(3));
         ap.securityToken=Configuration.TOKEN;
         return ap;
     }

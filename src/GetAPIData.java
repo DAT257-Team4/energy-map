@@ -4,17 +4,17 @@ import java.net.URL;
 
 public class GetAPIData {
 
-	public static final String BASE_URL = "https://web-api.tp.entsoe.eu/api";
-
 	/**
 	 * Send request via GET method.
 	 *
-	 * @param params  - object including all URL params
-	 * @return plain XML content
+	 * @param params  - Object including all URL params
+	 * @return Plain XML with energy production for 1 hour. Countries may provide this data 
+	 * in intervals of 1 hour, 30 minutes, or 15 minutes. Returns XML with error code 999 
+	 * and a reason if request failed.
 	 */
-	public static String sendAPIRequest(ApiRequeste params) {
+	public static String sendAPIRequest(ApiRequest params) {
 		//prepare URL with requesting params
-		String finalURL = addUrlParams(params, BASE_URL);
+		String finalURL = addUrlParams(params, Configuration.BASE_URL);
 
 		try {
 			//prepare connection
@@ -37,7 +37,7 @@ public class GetAPIData {
 		return null;
 	}
 
-	private static String addUrlParams(ApiRequeste params, String baseURL) {
+	private static String addUrlParams(ApiRequest params, String baseURL) {
 		if (!baseURL.endsWith("?")) {
 			baseURL += '?';
 		}
