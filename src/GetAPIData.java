@@ -12,7 +12,7 @@ public class GetAPIData {
 	 * in intervals of 1 hour, 30 minutes, or 15 minutes. Returns XML with error code 999 
 	 * and a reason if request failed.
 	 */
-	public static String sendAPIRequest(ApiRequest params) {
+	public static InputStream sendAPIRequest(ApiRequest params) {
 		//prepare URL with requesting params
 		String finalURL = addUrlParams(params, Configuration.BASE_URL);
 
@@ -27,9 +27,11 @@ public class GetAPIData {
 			//success
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				//get result as plain XML
-				return parseToPlainString(con.getInputStream());
+				//return parseToPlainString(con.getInputStream());
+				return con.getInputStream();
 			} else {
-				return parseToPlainString(con.getErrorStream());
+				//return parseToPlainString(con.getErrorStream());
+				return con.getErrorStream();
 			}
 		} catch (IOException e) {
 			System.out.println(String.format("Unexpected error. Message %s", e.getMessage()));
@@ -51,18 +53,5 @@ public class GetAPIData {
 		baseURL = baseURL + "periodEnd=" + params.PeriodEnd;
 
 		return baseURL;
-	}
-
-	private static String parseToPlainString(InputStream in) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		StringBuilder out = new StringBuilder();
-		String newLine = System.getProperty("line.separator");
-		String line;
-		while ((line = reader.readLine()) != null) {
-			out.append(line);
-			out.append(newLine);
-		}
-		in.close();
-		return out.toString();
 	}
 }

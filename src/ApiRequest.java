@@ -22,8 +22,8 @@ class ApiRequest{
 
         //API is 1 hour begind and expects time in utc. 
         //subtract 3 hours to correct for api lag and swedish summer time.
-        ap.PeriodStart=dtf.format(LocalDateTime.now().minusHours(4));  // "202309010000" YYYYYMMDD0000
-        ap.PeriodEnd=dtf.format(LocalDateTime.now().minusHours(3));
+        ap.PeriodStart=dtf.format(LocalDateTime.now().minusHours(5));  // "202309010000" YYYYYMMDD0000
+        ap.PeriodEnd=dtf.format(LocalDateTime.now().minusHours(4));
         ap.securityToken=Configuration.TOKEN;
         return ap;
     }
