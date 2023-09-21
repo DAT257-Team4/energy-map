@@ -1,10 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.Map;
 
 class ApiRequest{
     public String documentType;
@@ -26,7 +22,7 @@ class ApiRequest{
         ap.In_Domain=CodeFormats.COUN_MAP.get(countryName);
         ap.PsrType=CodeFormats.ENERGY_MAP.get(energyType);
 
-        //API is 1 hour begind and expects time in utc. 
+        //API is 1 hour behind and expects time in utc.
         //subtract 3 hours to correct for api lag and swedish summer time.
         ap.PeriodStart=dtf.format(LocalDateTime.now().minusHours(5));  // "202309010000" YYYYYMMDD0000
         ap.PeriodEnd=dtf.format(LocalDateTime.now().minusHours(4));

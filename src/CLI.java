@@ -14,13 +14,19 @@ public class CLI {
             String energy = reader.readLine();
             if (energy.equals("exit")) {
                 break;
+            } else if (energy.trim().equalsIgnoreCase("all")) {
+                System.out.println("Displaying data for energy production in " + country + ":");
+
+                ApiRequest params = ApiRequest.ApiReqForEnergySource(energy, country);
+                InputStream xml = GetAPIData.sendAPIRequest(params);
+                ApiRequest.PrintAsString(xml);
+            } else {
+                System.out.println("Displaying data for " + energy + " production in " + country + ":");
+
+                ApiRequest params = ApiRequest.ApiReqForEnergySource(energy, country);
+                InputStream xml = GetAPIData.sendAPIRequest(params);
+                ApiRequest.PrintAsString(xml);
             }
-
-            System.out.println("Displaying data for " + energy + " production in " + country + ":");
-
-            ApiRequest params = ApiRequest.ApiReqForEnergySource(energy, country);
-            InputStream xml = GetAPIData.sendAPIRequest(params);
-            ApiRequest.PrintAsString(xml);
         }   
     }
 }
