@@ -47,7 +47,10 @@ public class GetAPIData {
 		baseURL = baseURL + "securityToken=" + params.securityToken + "&";
 		baseURL = baseURL + "documentType=" + params.documentType + "&";
 		baseURL = baseURL + "processType=" + params.processType + "&";
-		baseURL = baseURL + "PsrType=" + params.PsrType + "&";
+		//If PsrType is null it will omit it and instead fetch all energy sources
+		if (params.PsrType != null) {
+			baseURL = baseURL + "PsrType=" + params.PsrType + "&";
+		}
 		baseURL = baseURL + "In_Domain=" + params.In_Domain + "&";
 		baseURL = baseURL + "periodStart=" + params.PeriodStart + "&";
 		baseURL = baseURL + "periodEnd=" + params.PeriodEnd;
