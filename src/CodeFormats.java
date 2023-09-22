@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CodeFormats {
-    final public static Map<String, String> COUN_MAP = new HashMap<String, String>(){{
+    final public static Map<String, String> COUN_MAP = new HashMap<>(){{
         put("albania", "10YAL-KESH-----5");
         put("armenia", "10Y1001A1001B004");
         put("austria", "10YAT-APG------L");
@@ -50,7 +50,7 @@ public class CodeFormats {
         put("united kingdom","10Y1001A1001A92E");
     }};
 
-    final public static Map<String, String> ENERGY_MAP = new HashMap<String, String>(){{
+    final public static Map<String, String> ENERGY_MAP = new HashMap<>(){{
         put("mixed","A03");
         put("generation","A04");
         put("load","A05");
@@ -78,5 +78,35 @@ public class CodeFormats {
         put("dc link","B22");
         put("substation","B23");
         put("transformer","B24");
+    }};
+
+    final public static Map<String, String> REVERSE_ENERGY_MAP = new HashMap<>(){{
+        put("A03", "mixed");
+        put("A04", "generation");
+        put("A05", "load");
+        put("B01", "biomass");
+        put("B02", "fossil brown coal/lignite");
+        put("B03", "fossil coal-derived gas");
+        put("B04", "fossil gas");
+        put("B05", "fossil hard coal");
+        put("B06", "fossil oil");
+        put("B07", "fossil oil shale");
+        put("B08", "fossil peat");
+        put("B09", "geothermal");
+        put("B10", "hydro pumped storage");
+        put("B11", "hydro run-of-river and poundage");
+        put("B12", "hydro water reservoir");
+        put("B13", "marine");
+        put("B14", "nuclear");
+        put("B15", "other renewable");
+        put("B16", "solar");
+        put("B17", "waste");
+        put("B18", "wind offshore");
+        put("B19", "wind onshore");
+        put("B20", "other");
+        put("B21", "ac link");
+        put("B22", "dc link");
+        put("B23", "substation");
+        put("B24", "transformer");
     }};
 }
