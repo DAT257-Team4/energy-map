@@ -82,9 +82,12 @@ public class XmlView {
             throw new RuntimeException(e);
         }
 
-        for (int i = 0; i<nodes.getLength(); i++) {
-            Element node = (Element) nodes.item(i);
-            quantity.append(node.getTextContent());
+        for (int i = 0; i<nodes.getLength(); i += 2) {
+            Element energyCode = (Element) nodes.item(i);
+            Element energyValue = (Element) nodes.item(i+1);
+            quantity.append(CodeFormats.REVERSE_ENERGY_MAP.get(energyCode.getTextContent()));
+            quantity.append("\n");
+            quantity.append(energyValue.getTextContent());
             quantity.append("\n");
         }
 
