@@ -18,14 +18,11 @@
       function drawRegionsMap() {
         // where data will be stored within the map
         // TODO add data variable from server <%= data %>
-        var data = google.visualization.arrayToDataTable([
-          ['Country', 'Production1 (MW)', 'Production2 (MW)'],
-          ['Germany', 200, 300],
-          ['France', 600, 40],
-          ['Russia', 700, 400],
-          ['Sweden', 1000, 100],
-          ['Norway', 5, 100]
-        ]);
+        let values= <%- data %>
+        console.log(values);
+        var data = google.visualization.arrayToDataTable(
+          values
+        );
 
         // Options for the map
         var options = {
