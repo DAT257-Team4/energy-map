@@ -1,14 +1,4 @@
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
-import javax.xml.namespace.NamespaceContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.*;
-import java.util.Iterator;
 
 public class CLI {
     public static void main(String[] args) throws IOException {
@@ -30,13 +20,13 @@ public class CLI {
 
                 ApiRequest params = ApiRequest.ApiReqForEnergySource(energy, country);
                 InputStream xml = GetAPIData.sendAPIRequest(params);
-                XmlView.QueryXMLForEnergyValues(xml);
+                XmlView.PrintXMLQuery(XmlView.QueryXMLForEnergyValues(xml));
             } else {
                 System.out.println("Displaying data for " + energy + " production in " + country + ":");
 
                 ApiRequest params = ApiRequest.ApiReqForEnergySource(energy, country);
                 InputStream xml = GetAPIData.sendAPIRequest(params);
-                XmlView.QueryXMLForEnergyValues(xml);
+                XmlView.PrintXMLQuery(XmlView.QueryXMLForEnergyValues(xml));
             }
         }
     }
