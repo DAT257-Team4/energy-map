@@ -20,13 +20,13 @@ public class CLI {
 
                 ApiRequest params = ApiRequest.ApiReqForEnergySource(energy, country);
                 InputStream xml = GetAPIData.sendAPIRequest(params);
-                XmlView.PrintXMLQuery(XmlView.QueryXMLForEnergyValues(xml));
+                XmlView.PrintXMLQuery(XmlQuery.QueryXMLForEnergyValues(xml));
             } else {
                 System.out.println("Displaying data for " + energy + " production in " + country + ":");
 
                 ApiRequest params = ApiRequest.ApiReqForEnergySource(energy, country);
                 InputStream xml = GetAPIData.sendAPIRequest(params);
-                XmlView.PrintXMLQuery(XmlView.QueryXMLForEnergyValues(xml));
+                XmlView.PrintXMLQuery(XmlQuery.QueryXMLForEnergyValues(xml));
             }
         }
     }
