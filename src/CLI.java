@@ -18,7 +18,7 @@ public class CLI {
             if (energy.equals("exit")) {
                 break;
             }
-            if (COUN_MAP.containsKey(country) && CodeFormats.ENERGY_MAP.containsKey(energy)){
+            if (CodeFormats.COUN_MAP.containsKey(country) && CodeFormats.ENERGY_MAP.containsKey(energy)){
                 System.out.println("Displaying data for " + energy + " production in " + country + ":");
 
                 ApiRequest params = ApiRequest.ApiReqForEnergySource(energy, country);
