@@ -1,6 +1,5 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.io.*;
 
 class ApiRequest{
     public String documentType;
