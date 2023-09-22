@@ -29,18 +29,4 @@ class ApiRequest{
         ap.securityToken=Configuration.TOKEN;
         return ap;
     }
-
-    //Takes XML plain text stored in InputStream object and parses to String, then prints
-    public static void PrintAsString(InputStream in) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        StringBuilder out = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            out.append(newLine);
-        }
-        in.close();
-        System.out.println(out.toString());
-    }
 }
