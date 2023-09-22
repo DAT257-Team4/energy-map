@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EnergyMap</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {
+        'packages':['geochart'],
+      });
+      google.charts.setOnLoadCallback(drawRegionsMap);
+
+      function drawRegionsMap() {
+        // where data will be stored within the map
+        // TODO add data variable from server <%= data %>
+        let values= <%- data %>
+        console.log(values);
+        var data = google.visualization.arrayToDataTable(
+          values
+        );
+
+        // Options for the map
+        var options = {
+          region: "150", //europe
+          colorAxis: {colors: ['blue', 'red'], minValue: 0},
+          backgroundColor: '#36393e'
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <main>
+        <h1>Welcome to EnergyMap</h1>  
+    </main>
+
+	<script src="index.js"></script>
+  <div class="center_regions">
+    <div class="regions_div" id="regions_div"></div>
+  </div>
+  
+  </body>
+</html>
