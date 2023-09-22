@@ -26,7 +26,7 @@ public class XmlView {
         System.out.println(out);
     }
 
-    public static void QueryXMLForEnergyValues(InputStream in) throws IOException {
+    public static NodeList QueryXMLForEnergyValues(InputStream in) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         StringBuilder out = new StringBuilder();
         String newLine = System.getProperty("line.separator");
@@ -73,7 +73,6 @@ public class XmlView {
 
         //Re-opens the InputSource
         source = new InputSource(new StringReader(out.toString()));
-        StringBuilder quantity = new StringBuilder();
 
         NodeList nodes;
         try {
@@ -82,15 +81,21 @@ public class XmlView {
             throw new RuntimeException(e);
         }
 
-        for (int i = 0; i<nodes.getLength(); i += 2) {
-            Element energyCode = (Element) nodes.item(i);
-            Element energyValue = (Element) nodes.item(i+1);
-            quantity.append(CodeFormats.REVERSE_ENERGY_MAP.get(energyCode.getTextContent()));
-            quantity.append("\n");
-            quantity.append(energyValue.getTextContent());
-            quantity.append("\n");
+        return nodes;
+    }
+
+    public static void PrintXMLQuery (NodeList results) {
+        StringBuilder queryText = new StringBuilder();
+
+        for (int i = 0; i<results.getLength(); i += 2) {
+            Element energyCode = (Element) results.item(i);
+            Element energyValue = (Element) results.item(i+1);
+            queryText.append(CodeFormats.REVERSE_ENERGY_MAP.get(energyCode.getTextContent()));
+            queryText.append("\n");
+            queryText.append(energyValue.getTextContent());
+            queryText.append("\n");
         }
 
-        System.out.println(quantity);
+        System.out.println(queryText);
     }
 }
