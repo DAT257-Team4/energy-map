@@ -18,10 +18,18 @@ jobs:
       - run: node --version
       - run: npm --version
       - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       - name: Install dependencies
         run: npm install
         working-directory: server
       - name: Run dev
-        run: npm run dev
+        run: npm run dev --if-present
+        working-directory: server
+      - name: Run tests
+        run: npm test
         working-directory: server
 
