@@ -39,6 +39,15 @@ public class GetAPIData {
 		return null;
 	}
 
+	/**
+	 * The function takes an API request object and a base URL, and appends the request parameters to the
+	 * URL to create a complete URL with query parameters.
+	 * 
+	 * @param params An object of type ApiRequest that contains the following properties:
+	 * @param baseURL The base URL is the initial URL to which the parameters will be added. It is a
+	 * string representing the base URL of the API endpoint.
+	 * @return The method is returning the updated baseURL string with the added URL parameters.
+	 */
 	private static String addUrlParams(ApiRequest params, String baseURL) {
 		if (!baseURL.endsWith("?")) {
 			baseURL += '?';

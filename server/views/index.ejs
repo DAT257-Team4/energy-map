@@ -18,7 +18,8 @@
       function drawRegionsMap() {
         // where data will be stored within the map
         // TODO add data variable from server <%= data %>
-        let values= <%- data %>
+        //let values= <%- data %>
+        let values = JSON.parse('<%- data %>');
         console.log(values);
         var data = google.visualization.arrayToDataTable(
           values
