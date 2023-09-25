@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": " rm -r java_results; mkdir java_results;  javac -d java_results/ -sourcepath ../src ../src/*.java ; nodemon ./bin/www",
-    "dev-win": "rd /s /q java_results & mkdir java_results & javac -d java_results\\ --source-path ..\\src ..\\src\\*.java & nodemon .\\bin\\www"
+    "dev-win": "rd /s /q java_results & mkdir java_results & javac -d java_results\\ --source-path ..\\src ..\\src\\*.java & nodemon .\\bin\\www",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -16,5 +17,8 @@
     "java": "^0.13.0",
     "morgan": "~1.9.1",
     "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "cypress": "^13.2.0"
   }
 }
