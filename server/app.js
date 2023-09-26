@@ -4,10 +4,23 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var cron = require('cron').CronJob;
+const java = require('java');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+
+// Cron job for updating database
+const dbJob = new CronJob('"15 * * * *"', () => { // Run 15 mins past every hour
+    // Call java function to update database here
+  }, () => {
+  },
+  true // Run when server starts
+);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
