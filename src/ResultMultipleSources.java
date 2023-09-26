@@ -1,6 +1,8 @@
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,12 +16,15 @@ public class ResultMultipleSources {
             "DC Link", "Substation", "Transformer"};
 
 
-    public ResultMultipleSources(String country){
-        // @TODO
+    public ResultMultipleSources(String country) throws IOException {
         values=new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         this.country=country;
+        ApiRequest params = ApiRequest.ApiReqForEnergySource("all", country);
+        InputStream xml = GetAPIData.sendAPIRequest(params);
+        updateValues(XmlQuery.QueryXMLForEnergyValues(xml));
     }
 
+    //Takes a list of nodes and updates the values in the values array
     public void updateValues (NodeList nodes) {
 
         for (int i = 0; i<nodes.getLength(); i += 2) {
@@ -34,7 +39,7 @@ public class ResultMultipleSources {
     }
 
     //@TODO Make a more elegant solution
-    final public static Map<String, Integer> POSITION_MAP = new HashMap<>(){{
+    final private static Map<String, Integer> POSITION_MAP = new HashMap<>(){{
         put("A03", 0);
         put("A04", 1);
         put("A05", 2);
