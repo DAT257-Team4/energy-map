@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>EnergyMap</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js">
+    </script>
+    <script type="text/javascript">
+      google.charts.load("current", {
+        packages: ["geochart"],
+      });
+      google.charts.setOnLoadCallback(() => {
+        drawRegionsMap();
+      });
+      
+      const input_data = [
+          ["Country", "Solar", "Nuclear", "Hydro", "WindOffshore"],
+          ["Germany", 200, 500, 800, 600],
+          ["Sweden", 300, 600, 700, 800],
+          ["France", 400, 500, 300, 200],
+          ["Italy", 200, 400, 500, 600],
+          ["Spain", 300, 200, 400, 500],
+          ["Greece", 400, 500, 600, 700],
+        ];
+
+      function drawRegionsMap(input_data) {
+        // where data will be stored within the map
+        //let values= <%- data %>
+        /* let values = JSON.parse('<%- data %>');
+        console.log(values);
+        var data = google.visualization.arrayToDataTable(
+          values
+        ); */
+
+        // Check that the google.visualization object is defined
+        if (!google.visualization) {
+          console.error("Google Visualization API not loaded");
+          return;
+        }
+
+        // Convert the input data to a DataTable
+        var data = google.visualization.arrayToDataTable(buildMatrix());
+
+        // Options for the map
+        var options = {
+          region: "150", //europe
+          /* 'width':400,
+          'height':300, */
+          backgroundColor: "#212969",
+          //colorAxis: { colors: ["blue", "red"], minValue: 0 },
+        };
+
+        
+
+        // Create the map and render it in the specified container
+        var container = document.getElementById("regions_div");
+        var map = new google.visualization.GeoChart(container);
+        map.draw(data, options);
+      }
+
+      // find the column of the energy type
+      function findCol(value) {
+        console.log(e.value);
+        for (var i = 0; i < input_data[0].length; i++) {
+          if (input_data[0][i] == value) {
+            console.log(i);
+            return i;
+          }
+        }
+        // if there is no data return -1
+        return -1;
+      }
+
+      // build the matrix for the map
+      function buildMatrix() {
+        var matrix = [];
+        var col = findCol(e.value);
+        if (col === -1) {
+          matrix.push([input_data[0][0], "no-data"]);
+          console.log(matrix);
+        }
+        else {
+          for (var i = 0; i < input_data.length; i++) {
+            matrix.push([input_data[i][0], input_data[i][col]]);
+          }
+          console.log(matrix);
+        }
+        return matrix;
+
+      }
+    </script>
+  </head>
+  <body>
+    <div>
+      <div class="index-container">
+        <h1 class="index-text">Welcome to EnergyMap</h1>
+        <div class="index-container1">
+          <div class="index-container2">
+            <div class="index-goe">
+              <div id="regions_div" style="width: 80%; height: 80%"></div>
+            </div>
+          </div>
+          <div class="index-container3">
+            <form>
+              <label for="energyType">Choose an energyType:</label>
+              <select name="energyType" id="energyType">
+                <option value="Biomass">Biomass</option>
+                <option value="FossilBrownCoalLignite">Fossil Brown coal/Lignite</option>
+                <option value="FossilCoalDerivedGas">Fossil Coal-derived gas</option>
+                <option value="FossilGas">Fossil Gas</option>
+                <option value="FossilHardCoal">Fossil HardCoal</option>
+                <option value="FossilOil">Fossil Oil</option>
+                <option value="FossilOilShale">Fossil Oil Shale</option>
+                <option value="FossilPeat">Fossil Peat</option>
+                <option value="Geothermal">Geothermal</option>
+                <option value="HydroPumpedStorage">Hydro Pumped Storage</option>
+                <option value="HydroRunOfRiverAndPoundage">Hydro Run-of-river and poundage</option>
+                <option value="Hydro Water Reservoir">Hydro Water Reservoir</option>
+                <option value="Marine">Marine</option>
+                <option value="Nuclear">Nuclear</option>
+                <option value="Solar" selected="selected">Solar</option>
+                <option value="Waste">Waste</option>
+                <option value="WindOffshore">Wind Offshore</option>
+                <option value="WindOnshore">Wind Onshore</option>
+                <option value="OtherRenewable">Other renewable</option>
+                <option value="Other">Other</option>
+              </select>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <script src="index.js"></script> -->
+    <script>
+      // update the map if the user changes the energy type
+      var e = document.getElementById("energyType");
+      function onChange() {
+        var value = e.value;
+        var text = e.options[e.selectedIndex].text;
+        console.log(value, text);
+        drawRegionsMap();
+      }
+      e.onchange = onChange;
+      onChange();
+    </script>
+    <div class="center_regions">
+      <div class="regions_div" id="regions_div"></div>
+    </div>
+  </body>
+</html>
