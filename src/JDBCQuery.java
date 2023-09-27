@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class JDBCQuery {
@@ -61,9 +60,9 @@ public class JDBCQuery {
         return results;
     }
 
-    public static List<String> SqlQuery(String country, String energyType) {
+    public static int SqlQuery(String country, String energyType) {
         Connection connection = null;
-        List<String> results = new ArrayList<>();
+        int quantity = 100;
         try {
             // Load the SQLite JDBC driver
             Class.forName("org.sqlite.JDBC");
@@ -78,18 +77,12 @@ public class JDBCQuery {
                 // Create a statement object
                 Statement statement = connection.createStatement();
 
-                String queryTable = "SELECT energyType, quantity FROM EnergyProduction WHERE country = '" + country + "' " +
+                String queryTable = "SELECT quantity FROM EnergyProduction WHERE country = '" + country + "' " +
                         "AND energyType = '" + energyType + "'";
 
                 ResultSet rs = statement.executeQuery(queryTable);
-
-                while (rs.next()) {
-                    String type = rs.getString("energyType");
-                    String quantity = rs.getString("quantity");
-
-                    results.add(type);
-                    results.add(quantity);
-                }
+                
+                quantity = rs.getInt("quantity");
 
                 // Close the statement
                 statement.close();
@@ -115,6 +108,6 @@ public class JDBCQuery {
                 e.printStackTrace();
             }
         }
-        return results;
+        return quantity;
     }
 }
