@@ -10,8 +10,6 @@ public class ResultOfQuery {
     public int value;
 
     public ResultOfQuery(String country,String energyType){
-        country=country.toLowerCase();
-        country.trim().equalsIgnoreCase("all");
         ApiRequest params = ApiRequest.ApiReqForEnergySource(energyType, country);
         InputStream xml = GetAPIData.sendAPIRequest(params);
 

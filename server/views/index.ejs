@@ -21,6 +21,22 @@
         //let values= <%- data %>
         let values = JSON.parse('<%- data %>');
         console.log(values);
+
+
+        var countryDict = {
+          'Bosnia and Herz.': 'Bosnia and Herzegovina',
+          'North Macedonia': 'Macedonia',
+          'Kosovo': {v: 'XK', f: 'Kosovo'}
+        };
+        for (var i = 0; i < values.length; i++)
+        {
+          var countryName = values[i][0];
+          if (countryName in countryDict)
+          {
+            values[i][0] = countryDict[countryName];
+          }
+        }
+
         var data = google.visualization.arrayToDataTable(
           values
         );
