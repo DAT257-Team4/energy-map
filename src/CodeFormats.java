@@ -2,6 +2,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CodeFormats {
+    public final static String []COUNTRY_LIST={"Albania","Armenia","Austria","Azerbaijan","Belarus","Belgium","Bosnia and Herz.","Bulgaria","Croatia","Cyprus","Czech Republic","Denmark","Estonia","Finland","France","Georgia","Germany","Greece","Hungary","Iceland ","Ireland","Italy","Kosovo","Latvia","Lithuania","Luxembourg","Malta ","Moldova","Montenegro","Netherlands","North Macedonia","Norway","Poland","Portugal","Romania","Russia","Serbia","Slovakia","Slovenia","Spain","Sweden","Switzerland","Turkey","Ukraine","United Kingdom"};
+
     final public static Map<String, String> COUN_MAP = new HashMap<>(){{
         put("albania", "10YAL-KESH-----5");
         put("armenia", "10Y1001A1001B004");
