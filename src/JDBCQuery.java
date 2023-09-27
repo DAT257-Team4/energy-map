@@ -62,7 +62,7 @@ public class JDBCQuery {
 
     public static int SqlQuery(String country, String energyType) {
         Connection connection = null;
-        int quantity = 100;
+        int quantity = 0;
         try {
             // Load the SQLite JDBC driver
             Class.forName("org.sqlite.JDBC");
