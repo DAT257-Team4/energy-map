@@ -1,8 +1,13 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class JDBCQuery {
-    public static void main(String[] args) {
+
+    public static List<String> SqlQuery(String country) {
         Connection connection = null;
+        List<String> results = new ArrayList<>();
         try {
             // Load the SQLite JDBC driver
             Class.forName("org.sqlite.JDBC");
@@ -17,28 +22,24 @@ public class JDBCQuery {
                 // Create a statement object
                 Statement statement = connection.createStatement();
 
-                // SQL query to create a table
-                String createTable = "CREATE TABLE IF NOT EXISTS EnergyProduction (" +
-                        "country TEXT NOT NULL," +
-                        "energyType TEXT NOT NULL," +
-                        "quantity INT," +
-                        "PRIMARY KEY (country, energyType)" +
-                        ")";
-
-                // Execute the SQL query
-                statement.execute(createTable);
-
-                String queryTable = "SELECT energyType, quantity FROM EnergyProduction WHERE country = 'Italy'";
+                String queryTable = "SELECT energyType, quantity FROM EnergyProduction WHERE country = '" + country + "'";
 
                 ResultSet rs = statement.executeQuery(queryTable);
 
-                System.out.println(rs.getString(1));
-                System.out.println(rs.getString(2));
+                while (rs.next()) {
+                    String energyType = rs.getString("energyType");
+                    String quantity = rs.getString("quantity");
+
+                    results.add(energyType);
+                    results.add(quantity);
+                }
+
                 // Close the statement
                 statement.close();
 
                 // Close the connection when done
                 connection.close();
+
             } else {
                 System.out.println("Failed to connect to the database.");
             }
@@ -57,5 +58,6 @@ public class JDBCQuery {
                 e.printStackTrace();
             }
         }
+        return results;
     }
 }
