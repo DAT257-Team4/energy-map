@@ -1,9 +1,4 @@
-package database;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class JDBCQuery {
     public static void main(String[] args) {
@@ -13,7 +8,7 @@ public class JDBCQuery {
             Class.forName("org.sqlite.JDBC");
 
             // Connect to the SQLite database
-            String url = "jdbc:sqlite:/../db/energy-production-db";
+            String url = "jdbc:sqlite:db/energy-production-db";
             connection = DriverManager.getConnection(url);
 
             if (connection != null) {
@@ -33,11 +28,12 @@ public class JDBCQuery {
                 // Execute the SQL query
                 statement.execute(createTable);
 
-                String queryTable = "SELECT country, energyType FROM EnergyProduction WHERE country = Sweden";
+                String queryTable = "SELECT energyType, quantity FROM EnergyProduction WHERE country = 'Italy'";
 
-                // Execute the SQL query
-                statement.execute(queryTable);
+                ResultSet rs = statement.executeQuery(queryTable);
 
+                System.out.println(rs.getString(1));
+                System.out.println(rs.getString(2));
                 // Close the statement
                 statement.close();
 
