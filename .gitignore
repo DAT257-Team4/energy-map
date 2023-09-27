@@ -3,4 +3,5 @@ src/Configuration.java
 **/node_modules
 **/**.class
 #server/package-lock.json
+server/node_modules/**
 server/node_modules

@@ -8,6 +8,7 @@ const CronJob = require('cron').CronJob;
 const java = require('java');
 
 java.classpath.push('java_results');
+java.classpath.push('../lib/sqlite-jdbc-3.43.0.0.jar');
 const dbUpdate = java.import("DBupdate");
 
 var indexRouter = require('./routes/index');
