@@ -4,21 +4,27 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var cron = require('cron').CronJob;
+const CronJob = require('cron').CronJob;
 const java = require('java');
+
+java.classpath.push('java_results');
+const dbUpdate = java.import("DBupdate");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
 
-
 // Cron job for updating database
-const dbJob = new CronJob('"15 * * * *"', () => { // Run 15 mins past every hour
-    // Call java function to update database here
-  }, () => {
+const dbJob = new CronJob('15 * * * *', 
+  onTick=() => { // Run 15 mins past every hour
+    dbUpdate.updateValues();
   },
-  true // Run when server starts
+  onComplete=null,
+  start=true, // Start job
+  timeZone=null,
+  context=null,
+  runOnInit=true // Run when server starts
 );
 
 
