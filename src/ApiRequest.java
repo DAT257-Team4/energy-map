@@ -1,7 +1,7 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-class ApiRequest{
+public class ApiRequest{
     public String documentType;
     public String processType;
     public String In_Domain;
