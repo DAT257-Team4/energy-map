@@ -7,7 +7,8 @@ public class CLI {
     public static void main(String[] args) throws IOException {
         System.out.println("Welcome to the energy map!");
         System.out.println("Type 'exit' to exit the program.");
-        while (true) {
+        DBupdate.updateValues();
+        /*while (true) {
             System.out.print("Please enter a country name: ");
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             String country = reader.readLine().toLowerCase();
@@ -38,6 +39,6 @@ public class CLI {
             } else {
                 System.out.println("Invalid input");
             }
-        }
+        }*/
     }
 }
