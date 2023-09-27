@@ -21,13 +21,13 @@
       });
       
       const input_data = [
-          ["Country", "Solar", "Nuclear", "Hydro", "WindOffshore"],
-          ["Germany", 200, 500, 800, 600],
-          ["Sweden", 300, 600, 700, 800],
-          ["France", 400, 500, 300, 200],
-          ["Italy", 200, 400, 500, 600],
-          ["Spain", 300, 200, 400, 500],
-          ["Greece", 400, 500, 600, 700],
+          ["Country", "Solar", "Nuclear", "Hydro Water Reservoir", "WindOffshore", "FossilGas"],
+          ["Germany", 200, 500, 800, 600, 5000],
+          ["Sweden", 300, 600, 700, 800, 0],
+          ["France", 400, 500, 300, 200, 100],
+          ["Italy", 200, 400, 500, 600, 600],
+          ["Spain", 300, 200, 400, 500, 300],
+          ["Greece", 400, 500, 600, 700, 50],
         ];
 
       function drawRegionsMap(input_data) {
@@ -51,13 +51,9 @@
         // Options for the map
         var options = {
           region: "150", //europe
-          /* 'width':400,
-          'height':300, */
           backgroundColor: "#212969",
-          //colorAxis: { colors: ["blue", "red"], minValue: 0 },
+          colorAxis: {minValue: 0},
         };
-
-        
 
         // Create the map and render it in the specified container
         var container = document.getElementById("regions_div");
@@ -65,7 +61,7 @@
         map.draw(data, options);
       }
 
-      // find the column of the energy type
+      // find the column index of the requested energy type
       function findCol(value) {
         console.log(e.value);
         for (var i = 0; i < input_data[0].length; i++) {
@@ -82,18 +78,21 @@
       function buildMatrix() {
         var matrix = [];
         var col = findCol(e.value);
+        // if there is no data for the energy type return a matrix with no data
         if (col === -1) {
           matrix.push([input_data[0][0], "no-data"]);
           console.log(matrix);
         }
+        // else build a new matrix with only the column for the country names 
+        // and the requested energy type
         else {
-          for (var i = 0; i < input_data.length; i++) {
+          matrix.push([input_data[0][0], input_data[0][col] + " [MW]"]);
+          for (var i = 1; i < input_data.length; i++) {
             matrix.push([input_data[i][0], input_data[i][col]]);
           }
           console.log(matrix);
         }
         return matrix;
-
       }
     </script>
   </head>
