@@ -1,6 +1,3 @@
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
