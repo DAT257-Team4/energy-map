@@ -1,9 +1,6 @@
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ResultMultipleSources {
@@ -19,27 +16,25 @@ public class ResultMultipleSources {
     public ResultMultipleSources(String country) throws IOException {
         values=new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         this.country=country;
-        ApiRequest params = ApiRequest.ApiReqForEnergySource("all", country);
-        InputStream xml = GetAPIData.sendAPIRequest(params);
-        updateValues(XmlQuery.QueryXMLForEnergyValues(xml));
+        updateValues(country);
     }
 
-    //Takes a list of nodes and updates the values in the values array
-    public void updateValues (NodeList nodes) {
+    public void updateValues(String country) {
+        List<String> results = JDBCQuery.SqlQuery(country);
 
-        for (int i = 0; i<nodes.getLength(); i += 2) {
+        for (int i = 0; i < results.size(); i+=2) {
             int position;
             int quantity;
-            Element energyCode = (Element) nodes.item(i);
-            Element energyValue = (Element) nodes.item(i+1);
-            position = POSITION_MAP.get(CodeFormats.REVERSE_ENERGY_MAP.get(energyCode.getTextContent()));
-            quantity = Integer.parseInt(energyValue.getTextContent());
+
+            position = POSITION_MAP.get(CodeFormats.ENERGY_MAP.get(results.get(i)));
+            quantity = Integer.parseInt(results.get(i+1));
             values[position] = quantity;
         }
+
     }
 
     //@TODO Make a more elegant solution
-    final private static Map<String, Integer> POSITION_MAP = new HashMap<>(){{
+    final private Map<String, Integer> POSITION_MAP = new HashMap<>(){{
         put("A03", 0);
         put("A04", 1);
         put("A05", 2);
