@@ -81,7 +81,7 @@ public class JDBCQuery {
                         "AND energyType = '" + energyType + "'";
 
                 ResultSet rs = statement.executeQuery(queryTable);
-                
+
                 quantity = rs.getInt("quantity");
 
                 // Close the statement
