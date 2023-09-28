@@ -34,7 +34,7 @@ public class ResultMultipleSources {
     }
 
     //@TODO Make a more elegant solution
-    final private static Map<String, Integer> POSITION_MAP = new HashMap<>(){{
+    final private Map<String, Integer> POSITION_MAP = new HashMap<>(){{
         put("A03", 0);
         put("A04", 1);
         put("A05", 2);
