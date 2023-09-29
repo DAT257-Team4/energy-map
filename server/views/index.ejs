@@ -13,9 +13,8 @@
       google.charts.load("current", {
         packages: ["geochart"]
       });
-      google.charts.setOnLoadCallback(() => {
-        drawRegionsMap();
-      });
+
+      let input_data = JSON.parse('<%- data %>');
       
       const test_data = [
           ["Country", "Solar", "Nuclear", "Hydro Water Reservoir", "WindOffshore", "FossilGas"],
@@ -27,12 +26,8 @@
           ["Greece", 400, 500, 600, 700, 0],
         ];
 
-      let input_data = JSON.parse('<%- data %>');
-      //let values= <%- data %>
-      // let values = JSON.parse('<%- data %>');
-
+      // Responsible for drawing the map using the Google Charts library.
       function drawRegionsMap() {
-        // where data will be stored within the map
 
         console.log(input_data);
 
@@ -42,6 +37,8 @@
           return;
         }
 
+        /* Creating a dictionary called `countryDict` that maps 
+           certain country names to their corresponding values. */
         var countryDict = {
           'Bosnia and Herz.': 'Bosnia and Herzegovina',
           'North Macedonia': 'Macedonia',
@@ -73,26 +70,28 @@
         map.draw(data, options);
       }
 
-      // find the column index of the requested energy type
+      // Find the column index of the requested energy type
       function findCol(value) {
         for (var i = 0; i < input_data[0].length; i++) {
           if (input_data[0][i] == value) {
             return i;
           }
         }
-        // if there is no data return -1
+        // If there is no data return -1
         console.info("No data for energy type", "\"" + energyType.value + "\"");
         return -1;
       }
 
+      /*  The `buildTable()` function is responsible for creating a new table of data 
+          based on the selected energy type and scale. */
       function buildTable() {
         var table = [];
         var col = findCol(energyType.value);
-        // if there is no data for the energy type return a table with no data
+        // If there is no data for the energy type return a table with no data
         if (col === -1) {
           table.push([input_data[0][0], "no-data"]);
         }
-        // else if there is data and the scale is set to linear build a new table 
+        // Else if there is data and the scale is set to linear build a new table 
         // with only the column for the country names and the requested energy type
         else if (scale.value == "Linear") {
           table.push([input_data[0][0], input_data[0][col] + " [MW]"]);
@@ -100,7 +99,7 @@
             table.push([input_data[i][0], input_data[i][col]]);
           }
         }
-        // else the scale is set to logarithmic, the data value is now an object with
+        // Else the scale is set to logarithmic, the data value is now an object with
         // a value v that is log10 of the original value and a formatted value f that
         // v is used for the color scale, f is used for the tooltip
         else {
@@ -167,21 +166,23 @@
       </div>
     </div>
 
-    <script src="index.js"></script>
-    <script>
+     <script>
       // update the map if the user changes the energy type or the color scale
       var scale = document.getElementById("colorScale");
       var energyType = document.getElementById("energyType");
       function onChange() {
         console.info("Selected:", scale.value, energyType.value);
-        drawRegionsMap();
+        /*  Sets up a callback function to be executed when the Google Charts library 
+            has finished loading. In this case, the callback function is 
+            `drawRegionsMap()`, which is responsible for drawing the map using 
+            the loaded library. By using this function, the map will only be drawn 
+            once the necessary library has been loaded, ensuring that the map is 
+            rendered correctly. */
+        google.charts.setOnLoadCallback(drawRegionsMap);
       }
       scale.onchange = onChange;
       energyType.onchange = onChange;
       onChange();
     </script>
-    <!-- <div class="center_regions">
-      <div class="regions_div" id="regions_div"></div>
-    </div> -->
   </body>
 </html>
