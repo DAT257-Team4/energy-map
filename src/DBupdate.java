@@ -34,7 +34,7 @@ public class DBupdate {
                     NodeList listRes=XmlQuery.QueryXMLForEnergyValues(GetAPIData.sendAPIRequest(req));
                     
                     int i=0;
-                    
+                    System.out.println("Retriving data for "+country+": "+listRes.getLength()+" lines");
                     while(i<listRes.getLength()){
                         Element energyCode = (Element) listRes.item(i);
                         i++;
