@@ -82,7 +82,9 @@ h6 {
   width: 100%;
   display: flex;
   padding: var(--dl-space-space-halfunit);
+  margin-top: var(--dl-space-space-halfunit);
   align-items: flex-start;
+  margin-bottom: var(--dl-space-space-halfunit);
   flex-direction: column;
   justify-content: flex-start;
 }
