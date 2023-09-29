@@ -14,8 +14,6 @@
         packages: ["geochart"]
       });
 
-      let input_data = JSON.parse('<%- data %>');
-      
       const test_data = [
           ["Country", "Solar", "Nuclear", "Hydro Water Reservoir", "WindOffshore", "FossilGas"],
           ["Germany", 200, 500, 800, 600, 10000],
@@ -26,10 +24,40 @@
           ["Greece", 400, 500, 600, 700, 0],
         ];
 
+
+      let input_data = JSON.parse('<%- data %>');
+      input_data = removeNoData();
+      
+      // removes countries that have no data at all
+      function removeNoData() {
+        let tempArr = [];
+        tempArr[0] = input_data[0];
+        let tempArrIndex = 1;
+        for (var i = 1; i < input_data.length; i++) {
+          if (sumArrayIndex(input_data[i], 1, input_data[i].length) != 0) {
+            tempArr[tempArrIndex] = input_data[i];
+            tempArrIndex++;
+          }
+        }
+        console.info("Removed countries with no data");
+        console.log(input_data);
+        return tempArr;
+      }
+      
+      // summs all elements in an array between startIndex and endIndex
+      function sumArrayIndex(arr, startIndex, endIndex) {
+        let sum = 0;
+        for (var i = startIndex; i < endIndex; i++) {
+          sum += arr[i];
+        }
+        return sum;
+      }
+
+
       // Responsible for drawing the map using the Google Charts library.
       function drawRegionsMap() {
 
-        console.log(input_data);
+        //console.log(input_data);
 
         // Check that the google.visualization object is defined
         if (!google.visualization) {
@@ -60,7 +88,7 @@
         var options = {
           region: "150", //europe
           backgroundColor: "#212969",
-          colorAxis: {minValue: 0, scaleType: 'log'},
+          colorAxis: {minValue: 0},
           datalessRegionColor: "#a6a6a6",
         };
 
@@ -128,9 +156,6 @@
             <form>
               <label for="energyType">Choose an energyType:</label>
               <select name="energyType" id="energyType">
-                <option value="Mixed">Mixed</option>
-                <option value="Generation">Generation</option>
-                <option value="Load">Load</option>
                 <option value="Biomass">Biomass</option>
                 <option value="Fossil Brown coal/Lignite">Fossil Brown coal/Lignite</option>
                 <option value="Fossil Coal-derived gas">Fossil Coal-derived gas</option>
@@ -143,7 +168,6 @@
                 <option value="Hydro Pumped Storage">Hydro Pumped Storage</option>
                 <option value="Hydro Run-of-river and poundage">Hydro Run-of-river and poundage</option>
                 <option value="Hydro Water Reservoir">Hydro Water Reservoir</option>
-                <option value="Marine">Marine</option>
                 <option value="Nuclear">Nuclear</option>
                 <option value="Solar" selected="selected">Solar</option>
                 <option value="Waste">Waste</option>
