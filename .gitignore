@@ -4,3 +4,4 @@ src/Configuration.java
 **/**.class
 server/package-lock.json
 server/node_modules
+.vscode/settings.json
