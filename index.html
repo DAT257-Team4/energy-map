@@ -14,7 +14,7 @@
     </script>
     <script type="text/javascript">
       google.charts.load("current", {
-        packages: ["geochart"],
+        packages: ["geochart"]
       });
       google.charts.setOnLoadCallback(() => {
         drawRegionsMap();
@@ -22,12 +22,12 @@
       
       const input_data = [
           ["Country", "Solar", "Nuclear", "Hydro Water Reservoir", "WindOffshore", "FossilGas"],
-          ["Germany", 200, 500, 800, 600, 5000],
-          ["Sweden", 300, 600, 700, 800, 0],
+          ["Germany", 200, 500, 800, 600, 10000],
+          ["Sweden", 300, 600, 700, 800, 1000],
           ["France", 400, 500, 300, 200, 100],
-          ["Italy", 200, 400, 500, 600, 600],
-          ["Spain", 300, 200, 400, 500, 300],
-          ["Greece", 400, 500, 600, 700, 50],
+          ["Italy", 200, 400, 500, 600, 10],
+          ["Spain", 300, 200, 400, 500, 0],
+          ["Greece", 400, 500, 600, 700, 0],
         ];
 
       function drawRegionsMap(input_data) {
@@ -46,13 +46,14 @@
         }
 
         // Convert the input data to a DataTable
-        var data = google.visualization.arrayToDataTable(buildMatrix());
+        var data = google.visualization.arrayToDataTable(buildTable());
 
         // Options for the map
         var options = {
           region: "150", //europe
           backgroundColor: "#212969",
-          colorAxis: {minValue: 0},
+          colorAxis: {minValue: 0, scaleType: 'log'},
+          datalessRegionColor: "#a6a6a6",
         };
 
         // Create the map and render it in the specified container
@@ -63,18 +64,17 @@
 
       // find the column index of the requested energy type
       function findCol(value) {
-        console.log(e.value);
         for (var i = 0; i < input_data[0].length; i++) {
           if (input_data[0][i] == value) {
-            console.log(i);
             return i;
           }
         }
         // if there is no data return -1
+        console.info("No data for energy type", "\"" + energyType.value + "\"");
         return -1;
       }
 
-      // build the matrix for the map
+      /* // build the matrix for the map
       function buildMatrix() {
         var matrix = [];
         var col = findCol(e.value);
@@ -93,6 +93,36 @@
           console.log(matrix);
         }
         return matrix;
+      } */
+
+      // build the matrix for the map
+      function buildTable() {
+        var table = [];
+        var col = findCol(energyType.value);
+        // if there is no data for the energy type return a table with no data
+        if (col === -1) {
+          table.push([input_data[0][0], "no-data"]);
+        }
+        // else if there is data and the scale is set to linear build a new table 
+        // with only the column for the country names and the requested energy type
+        else if (scale.value == "Linear") {
+          table.push([input_data[0][0], input_data[0][col] + " [MW]"]);
+          for (var i = 1; i < input_data.length; i++) {
+            table.push([input_data[i][0], input_data[i][col]]);
+          }
+        }
+        // else the scale is set to logarithmic, the data value is now an object with
+        // a value v that is log10 of the original value and a formatted value f that
+        // v is used for the color scale, f is used for the tooltip
+        else {
+          table.push([input_data[0][0], input_data[0][col] + " [MW]"]);
+          for (var i = 1; i < input_data.length; i++) {
+            let value = {v: Math.log10(input_data[i][col]), f: input_data[i][col]};
+            table.push([input_data[i][0], value]);
+          }
+        }
+        console.log(table);
+        return table;
       }
     </script>
   </head>
@@ -132,6 +162,14 @@
                 <option value="Other">Other</option>
               </select>
             </form>
+
+            <form>
+              <label for="colorScale">Chose color scale (tooltip always shows real value):</label>
+              <select name="colorScale" id="colorScale">
+                <option value="Linear" selected="selected">Linear</option>
+                <option value="Logarithmic">Logarithmic</option>
+              </select>
+            </form>
           </div>
         </div>
       </div>
@@ -139,15 +177,15 @@
 
     <!-- <script src="index.js"></script> -->
     <script>
-      // update the map if the user changes the energy type
-      var e = document.getElementById("energyType");
+      // update the map if the user changes the energy type or the color scale
+      var scale = document.getElementById("colorScale");
+      var energyType = document.getElementById("energyType");
       function onChange() {
-        var value = e.value;
-        var text = e.options[e.selectedIndex].text;
-        console.log(value, text);
+        console.info("Selected:", scale.value, energyType.value);
         drawRegionsMap();
       }
-      e.onchange = onChange;
+      scale.onchange = onChange;
+      energyType.onchange = onChange;
       onChange();
     </script>
     <div class="center_regions">
