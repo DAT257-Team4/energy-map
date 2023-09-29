@@ -1,32 +1,14 @@
-import java.io.IOException;
-import java.io.InputStream;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 
 public class ResultOfQuery {
+    //Possibly redundant
     public String country;
+    //Possibly redundant
     public String source;
     public int value;
 
-    public ResultOfQuery(String country,String energyType){
-        country=country.toLowerCase();
-        country.trim().equalsIgnoreCase("all");
-        ApiRequest params = ApiRequest.ApiReqForEnergySource(energyType, country);
-        InputStream xml = GetAPIData.sendAPIRequest(params);
-
-        
-        Element energyValue;
-        try {
-            NodeList l = XmlQuery.QueryXMLForEnergyValues(xml);
-            energyValue = (Element) l.item(1);
-            String ev=energyValue.getTextContent();
-            value=Integer.parseInt(ev);
-        } catch (Exception e) {
-            value=0;
-        }
-
-        this.country=country;
-        source=energyType;
+    public ResultOfQuery(String country,String source){
+        this.country = country;
+        this.source = source;
+        value = JDBCQuery.SqlQuery(country, source.toLowerCase());
     }
 }

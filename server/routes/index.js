@@ -11,7 +11,7 @@ let COUNTRY_LIST=["Albania","Armenia","Austria","Azerbaijan","Belarus","Belgium"
     parameter for index.ejs file: data 
 */
 router.get('/', function(req, res, next) {
-  let result =[[ "Country","Fossil Gas"], ...(COUNTRY_LIST.map(x =>[x, (new queryResult(x,"Fossil Gas")).value]))]
+  let result =[[ "Country", ...ENERGY_SOURCES], ...(COUNTRY_LIST.map(x =>[x, ...((new multipleResult(x)).values)]))];
   console.log(result)
   res.render('index.ejs', { data : JSON.stringify(result) }); 
 });
