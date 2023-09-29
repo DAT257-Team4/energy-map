@@ -1,15 +1,16 @@
 body {
   background-color: rgb(54, 57, 62);
-  padding: 50px;
+  /* padding: 50px; */
   font-family: 'Poppins', sans-serif;
+  color: rgb(255, 255, 255);
 }
+
 
 a {
   color: #00B7FF;
 }
 
 h1 {
-  color: rgb(255, 255, 255);
   margin-left: 20px;
   font-weight: 700;
 }
@@ -24,19 +25,85 @@ h6 {
   font-weight:500;
 }
 
-.regions_div {
+/* .regions_div {
   display: inline-block;
-  /* height: 80dvh; */
+  /* height: 80dvh; 
   width: 80dvw;
   margin: 0; 
   /* border: 5px solid #555; */
-  flex-wrap: wrap;
-}
+   /* flex-wrap: wrap;  
+} */
 
 .center_regions {
   width: 100%;
   text-align: center;
   
+}
+
+.index-container {
+  width: 100%;
+  display: flex;
+  overflow: hidden;
+  min-height: 30vh;
+  align-items: center;
+  flex-direction: column;
+}
+.index-text {
+  padding: var(--dl-space-space-unit);
+}
+.index-container1 {
+  gap: var(--dl-space-space-threeunits);
+  width: 100%;
+  height: auto;
+  display: flex;
+  max-width: var(--dl-size-size-maxwidth);
+  margin-top: 0px;
+  align-items: flex-start;
+  margin-left: 00px;
+  padding-top: var(--dl-space-space-threeunits);
+  margin-right: 00px;
+  padding-left: var(--dl-space-space-threeunits);
+  padding-right: var(--dl-space-space-threeunits);
+  padding-bottom: var(--dl-space-space-threeunits);
+}
+.index-container2 {
+  gap: var(--dl-space-space-oneandhalfunits);
+  flex: 3;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.index-goe {
+  display: contents;
+}
+.index-container3 {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  padding: var(--dl-space-space-halfunit);
+  margin-top: var(--dl-space-space-halfunit);
+  align-items: flex-start;
+  margin-bottom: var(--dl-space-space-halfunit);
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
 }
 
 .banner {
@@ -62,5 +129,4 @@ h6 {
 .banner a:hover {
   text-decoration:none;
 }
-
 

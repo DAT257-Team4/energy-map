@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>EnergyMap</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-    
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js">
+    </script>
     <script type="text/javascript">
       google.charts.load("current", {
         packages: ["geochart"]
@@ -17,7 +20,7 @@
         drawRegionsMap();
       });
       
-      const test_data = [
+      const input_data = [
           ["Country", "Solar", "Nuclear", "Hydro Water Reservoir", "WindOffshore", "FossilGas"],
           ["Germany", 200, 500, 800, 600, 10000],
           ["Sweden", 300, 600, 700, 800, 1000],
@@ -27,33 +30,19 @@
           ["Greece", 400, 500, 600, 700, 0],
         ];
 
-      let input_data = JSON.parse('<%- data %>');
-      //let values= <%- data %>
-      // let values = JSON.parse('<%- data %>');
-
       function drawRegionsMap(input_data) {
         // where data will be stored within the map
-
-        console.log(input_data);
+        //let values= <%- data %>
+        /* let values = JSON.parse('<%- data %>');
+        console.log(values);
+        var data = google.visualization.arrayToDataTable(
+          values
+        ); */
 
         // Check that the google.visualization object is defined
         if (!google.visualization) {
           console.error("Google Visualization API not loaded");
           return;
-        }
-
-        var countryDict = {
-          'Bosnia and Herz.': 'Bosnia and Herzegovina',
-          'North Macedonia': 'Macedonia',
-          'Kosovo': {v: 'XK', f: 'Kosovo'}
-        };
-        for (var i = 0; i < input_data.length; i++)
-        {
-          var countryName = values[i][0];
-          if (countryName in countryDict)
-          {
-            input_data[i][0] = countryDict[countryName];
-          }
         }
 
         // Convert the input data to a DataTable
@@ -85,6 +74,28 @@
         return -1;
       }
 
+      /* // build the matrix for the map
+      function buildMatrix() {
+        var matrix = [];
+        var col = findCol(e.value);
+        // if there is no data for the energy type return a matrix with no data
+        if (col === -1) {
+          matrix.push([input_data[0][0], "no-data"]);
+          console.log(matrix);
+        }
+        // else build a new matrix with only the column for the country names 
+        // and the requested energy type
+        else {
+          matrix.push([input_data[0][0], input_data[0][col] + " [MW]"]);
+          for (var i = 1; i < input_data.length; i++) {
+            matrix.push([input_data[i][0], input_data[i][col]]);
+          }
+          console.log(matrix);
+        }
+        return matrix;
+      } */
+
+      // build the matrix for the map
       function buildTable() {
         var table = [];
         var col = findCol(energyType.value);
@@ -129,28 +140,25 @@
             <form>
               <label for="energyType">Choose an energyType:</label>
               <select name="energyType" id="energyType">
-                <option value="Mixed">Mixed</option>
-                <option value="Generation">Generation</option>
-                <option value="Load">Load</option>
                 <option value="Biomass">Biomass</option>
-                <option value="Fossil Brown coal/Lignite">Fossil Brown coal/Lignite</option>
-                <option value="Fossil Coal-derived gas">Fossil Coal-derived gas</option>
-                <option value="Fossil Gas">Fossil Gas</option>
-                <option value="Fossil Hard coal">Fossil HardCoal</option>
-                <option value="Fossil Oil">Fossil Oil</option>
-                <option value="Fossil Oil shale">Fossil Oil Shale</option>
-                <option value="Fossil Peat">Fossil Peat</option>
+                <option value="FossilBrownCoalLignite">Fossil Brown coal/Lignite</option>
+                <option value="FossilCoalDerivedGas">Fossil Coal-derived gas</option>
+                <option value="FossilGas">Fossil Gas</option>
+                <option value="FossilHardCoal">Fossil HardCoal</option>
+                <option value="FossilOil">Fossil Oil</option>
+                <option value="FossilOilShale">Fossil Oil Shale</option>
+                <option value="FossilPeat">Fossil Peat</option>
                 <option value="Geothermal">Geothermal</option>
-                <option value="Hydro Pumped Storage">Hydro Pumped Storage</option>
-                <option value="Hydro Run-of-river and poundage">Hydro Run-of-river and poundage</option>
+                <option value="HydroPumpedStorage">Hydro Pumped Storage</option>
+                <option value="HydroRunOfRiverAndPoundage">Hydro Run-of-river and poundage</option>
                 <option value="Hydro Water Reservoir">Hydro Water Reservoir</option>
                 <option value="Marine">Marine</option>
                 <option value="Nuclear">Nuclear</option>
                 <option value="Solar" selected="selected">Solar</option>
                 <option value="Waste">Waste</option>
-                <option value="Wind Offshore">Wind Offshore</option>
-                <option value="Wind Onshore">Wind Onshore</option>
-                <option value="Other renewable">Other renewable</option>
+                <option value="WindOffshore">Wind Offshore</option>
+                <option value="WindOnshore">Wind Onshore</option>
+                <option value="OtherRenewable">Other renewable</option>
                 <option value="Other">Other</option>
               </select>
             </form>
@@ -167,7 +175,7 @@
       </div>
     </div>
 
-    <script src="index.js"></script>
+    <!-- <script src="index.js"></script> -->
     <script>
       // update the map if the user changes the energy type or the color scale
       var scale = document.getElementById("colorScale");
@@ -180,8 +188,8 @@
       energyType.onchange = onChange;
       onChange();
     </script>
-    <!-- <div class="center_regions">
+    <div class="center_regions">
       <div class="regions_div" id="regions_div"></div>
-    </div> -->
+    </div>
   </body>
 </html>
