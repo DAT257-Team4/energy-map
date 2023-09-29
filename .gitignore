@@ -7,4 +7,4 @@ server/node_modules
 .vscode/settings.json
 #server/package-lock.json
 server/node_modules/**
-
+server/db/energy-production-db

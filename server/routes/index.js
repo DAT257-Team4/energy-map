@@ -14,6 +14,8 @@ router.get('/', function(req, res, next) {
   let result =[[ "Country","Fossil Gas"], ...(COUNTRY_LIST.map(x =>[x, (new queryResult(x,"Fossil Gas")).value]))]
   console.log(result)
   res.render('index.ejs', { data : JSON.stringify(result) }); 
+  console.log([ENERGY_SOURCES, ...(COUNTRY_LIST.map(x =>[x, ...((new multipleResult(x)).values)]))]);
+  
 });
 
 /*

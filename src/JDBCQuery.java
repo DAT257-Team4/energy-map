@@ -16,8 +16,7 @@ public class JDBCQuery {
             connection = DriverManager.getConnection(url);
 
             if (connection != null) {
-                System.out.println("Connected to the database!");
-
+                
                 // Create a statement object
                 Statement statement = connection.createStatement();
 
@@ -72,8 +71,7 @@ public class JDBCQuery {
             connection = DriverManager.getConnection(url);
 
             if (connection != null) {
-                System.out.println("Connected to the database!");
-
+                
                 // Create a statement object
                 Statement statement = connection.createStatement();
 

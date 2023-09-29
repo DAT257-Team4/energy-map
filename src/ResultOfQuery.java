@@ -9,6 +9,6 @@ public class ResultOfQuery {
     public ResultOfQuery(String country,String source){
         this.country = country;
         this.source = source;
-        value = JDBCQuery.SqlQuery(country, source);
+        value = JDBCQuery.SqlQuery(country, source.toLowerCase());
     }
 }
