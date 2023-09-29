@@ -42,6 +42,20 @@
           return;
         }
 
+        var countryDict = {
+          'Bosnia and Herz.': 'Bosnia and Herzegovina',
+          'North Macedonia': 'Macedonia',
+          'Kosovo': {v: 'XK', f: 'Kosovo'}
+        };
+        for (var i = 0; i < input_data.length; i++)
+        {
+          var countryName = values[i][0];
+          if (countryName in countryDict)
+          {
+            input_data[i][0] = countryDict[countryName];
+          }
+        }
+
         // Convert the input data to a DataTable
         var data = google.visualization.arrayToDataTable(buildTable());
 

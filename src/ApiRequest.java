@@ -1,7 +1,7 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-class ApiRequest{
+public class ApiRequest{
     public String documentType;
     public String processType;
     public String In_Domain;
@@ -14,6 +14,9 @@ class ApiRequest{
     public static ApiRequest ApiReqForEnergySource(String energyType, String countryName){
         ApiRequest ap =new ApiRequest();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHH00");  
+        countryName=countryName.toLowerCase();
+        countryName.trim().equalsIgnoreCase("all");
+        
 
 
         ap.documentType="A75";
