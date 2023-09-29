@@ -5,3 +5,4 @@ src/Configuration.java
 #server/package-lock.json
 server/node_modules/**
 server/node_modules
+server/db/energy-production-db
