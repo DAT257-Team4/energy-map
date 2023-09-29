@@ -19,13 +19,15 @@ var app = express();
 // Cron job for updating database
 const dbJob = new CronJob('15 * * * *', 
   onTick=() => { // Run 15 mins past every hour
+    console.log("Initializing the database")
     dbUpdate.updateValues();
+    console.log("Database updated correctly")
   },
   onComplete=null,
   start=true, // Start job
   timeZone=null,
   context=null,
-  runOnInit=true // Run when server starts
+  runOnInit=false // Run when server starts
 );
 
 

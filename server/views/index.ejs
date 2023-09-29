@@ -31,7 +31,7 @@
       //let values= <%- data %>
       // let values = JSON.parse('<%- data %>');
 
-      function drawRegionsMap(input_data) {
+      function drawRegionsMap() {
         // where data will be stored within the map
 
         console.log(input_data);
@@ -49,7 +49,7 @@
         };
         for (var i = 0; i < input_data.length; i++)
         {
-          var countryName = values[i][0];
+          var countryName = input_data[i][0];
           if (countryName in countryDict)
           {
             input_data[i][0] = countryDict[countryName];
