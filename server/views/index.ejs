@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>EnergyMap</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
     
@@ -16,14 +19,25 @@
   <body>
     <main>
     <div class="container-fluid border-bottom">
-      <header class="d-flex flex-wrap justify-content-start align-items-center py-2">
-        <img class="img-fluid" src="/images/favicon.png" style="max-height: 40px">
-        <span class="fs-4 mx-2">Energy map</span>
-      </header>
+      <nav class="navbar navbar-expand navbar-light bg-light px-3 w-100" style="height: 60px;">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img src="/images/favicon.png" height="36px" width="36px">
+          <p class="my-auto ms-2">EnergyMap</p>
+        </a>
+        <div class="navbar-collapse">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://github.com/DAT257-Team4/energy-map">
+                <i class="bi bi-github fs-4"></i>
+              </a>
+            </li>
+          </ul>  
+        </div>
+      </nav>
     </div>
 
 
-    <div class="container">
+    <!--<div class="container">
       <div class="container">
         <div class="index-goe">
           <div id="regions_div" style="width: 80%; height: 80%"></div>
