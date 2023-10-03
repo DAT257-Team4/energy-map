@@ -34,7 +34,7 @@ public class DBupdate {
                     NodeList listRes=XmlQuery.QueryXMLForEnergyValues(GetAPIData.sendAPIRequest(req));
                     
                     int i=0;
-                    System.out.println("Retriving data for "+country+": "+listRes.getLength()+" lines");
+                    DeletePreviousData(country, statement);
                     while(i<listRes.getLength()){
                         Element energyCode = (Element) listRes.item(i);
                         i++;
@@ -43,9 +43,7 @@ public class DBupdate {
                             totValue+= Integer.parseInt(((Element) listRes.item(i)).getTextContent());
                             i++;
                         }
-                        DBUpdate(country, CodeFormats.REVERSE_ENERGY_MAP.get(energyCode.getTextContent()),totValue,statement);
-                    
-                    
+                        InsertValueToDB(country, CodeFormats.REVERSE_ENERGY_MAP.get(energyCode.getTextContent()),totValue,statement);
                     };
 
                 }catch(Exception e){
@@ -59,7 +57,26 @@ public class DBupdate {
         }
     }
 
-    public static void DBUpdate(String country, String energySource, int value, Statement statement) throws SQLException{
+    /**
+     * This method take a country and a statement connection to database and remove all the values for that county
+     * @param country the country
+     * @param statement the statement connection to the DB
+     * @throws SQLException
+     */
+    private static void DeletePreviousData(String country, Statement statement) throws SQLException {
+        String q = "DELETE FROM `EnergyProduction`  WHERE Country='"+country+"'";
+        statement.executeUpdate(q);
+    }
+
+    /**
+     * This function execute the query to add the values to the DB
+     * @param country   The country
+     * @param energySource  The energy source name
+     * @param value     The value
+     * @param statement The statament connection to the DB
+     * @throws SQLException 
+     */
+    private static void InsertValueToDB(String country, String energySource, int value, Statement statement) throws SQLException{
         String q="REPLACE INTO `EnergyProduction`  VALUES ('"+country+"','"+energySource+"', "+value+")";        
         statement.executeUpdate(q);
     }
