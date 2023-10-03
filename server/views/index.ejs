@@ -11,7 +11,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load("current", {
-        packages: ["geochart"]
+        packages: ["geochart", "corechart"]
       });
 
       const test_data = [
@@ -26,7 +26,7 @@
 
 
       let input_data = JSON.parse('<%- data %>');
-      input_data = removeNoData();
+      //input_data = removeNoData();
       
       // removes countries that have no data at all
       function removeNoData() {
@@ -83,19 +83,35 @@
 
         // Convert the input data to a DataTable
         var data = google.visualization.arrayToDataTable(buildTable());
+        var testPie = google.visualization.arrayToDataTable(createPieChartTable("Germany"));
 
         // Options for the map
-        var options = {
+        var optionsMap = {
           region: "150", //europe
           backgroundColor: "#212969",
           colorAxis: {minValue: 0},
           datalessRegionColor: "#a6a6a6",
         };
 
+        // Options for the piechart
+        var optionsPie = {
+          title: 'My Daily Activities',
+          pieHole: 0.4,
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, optionsPie);
+
         // Create the map and render it in the specified container
         var container = document.getElementById("regions_div");
         var map = new google.visualization.GeoChart(container);
-        map.draw(data, options);
+        
+        function myClickHandler(){
+          var selection = chart.getSelection();
+          console.log(selection);
+          alert('You selected yo mamma');
+        }
+        google.visualization.events.addListener(map, 'select', myClickHandler);
+        map.draw(data, optionsMap);
       }
 
       // Find the column index of the requested energy type
@@ -139,6 +155,47 @@
         }
         console.log(table);
         return table;
+      }
+
+      function drawPieChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Work',     11],
+          ['Eat',      2],
+          ['Commute',  2],
+          ['Watch TV', 2],
+          ['Sleep',    7]
+        ]);
+
+        var options = {
+          title: 'My Daily Activities',
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+
+
+      function createPieChartTable(country) {
+        let row = findRow(country);
+        let table = [];
+        for (var i = 0; i < input_data[0].length; i++) {
+          table.push([input_data[0][i], input_data[row][i]]);
+        }
+        console.log(table);
+        return table;
+      }
+
+      function findRow(country) {
+        for (var i = 0; i < input_data.length; i++) {
+          if (input_data[i][0] == country) {
+            return i;
+          }
+        }
+        // If there is no data return -1
+        console.info("No data for country", "\"" + country + "\"");
+        return -1;
       }
     </script>
   </head>
@@ -185,6 +242,10 @@
                 <option value="Logarithmic">Logarithmic</option>
               </select>
             </form>
+
+            <div id="donutchart" style="width: 900px; height: 500px;"></div>
+            
+
           </div>
         </div>
       </div>
@@ -203,6 +264,8 @@
             once the necessary library has been loaded, ensuring that the map is 
             rendered correctly. */
         google.charts.setOnLoadCallback(drawRegionsMap);
+        //google.charts.setOnLoadCallback(drawPieChart);
+        
       }
       scale.onchange = onChange;
       energyType.onchange = onChange;
