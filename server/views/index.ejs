@@ -25,8 +25,12 @@
         ];
 
 
+      let pubBackgroundColor = "rgb(54, 57, 62)";
+
       let input_data = JSON.parse('<%- data %>');
-      //input_data = removeNoData();
+      console.log(input_data);  
+      let countrySelection = undefined;
+      // input_data = removeNoData();
       
       // removes countries that have no data at all
       function removeNoData() {
@@ -57,7 +61,7 @@
       // Responsible for drawing the map using the Google Charts library.
       function drawRegionsMap() {
 
-        //console.log(input_data);
+        // console.log(input_data);
 
         // Check that the google.visualization object is defined
         if (!google.visualization) {
@@ -82,11 +86,17 @@
         }
 
         // Convert the input data to a DataTable
-        var data = google.visualization.arrayToDataTable(buildTable());
-        var testPie = google.visualization.arrayToDataTable(createPieChartTable("Germany"));
+        var data = google.visualization.arrayToDataTable(buildTable(scale.value));
+        if (countrySelection) {
+          var pieData = google.visualization.arrayToDataTable(createPieChartTable(countrySelection));
+        }
+        else {
+          var pieData = google.visualization.arrayToDataTable(buildTable("Linear"));
+        }
 
         // Options for the map
         var optionsMap = {
+          dataMode: 'regions',
           region: "150", //europe
           backgroundColor: "#212969",
           colorAxis: {minValue: 0},
@@ -95,20 +105,40 @@
 
         // Options for the piechart
         var optionsPie = {
-          title: 'My Daily Activities',
+          title: countrySelection? countrySelection : "Europe",
+          titleTextStyle: { color: "white",
+            //fontName:,
+            fontSize: 30,
+            bold: true},
           pieHole: 0.4,
+          backgroundColor: pubBackgroundColor,
+          legend: {textStyle: {color: 'white'}},
+          pieSliceBorderColor: pubBackgroundColor,
         };
         var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-        chart.draw(data, optionsPie);
+        chart.draw(pieData, optionsPie);
+        //chart.draw(data, optionsPie);
 
         // Create the map and render it in the specified container
         var container = document.getElementById("regions_div");
         var map = new google.visualization.GeoChart(container);
         
         function myClickHandler(){
-          var selection = chart.getSelection();
-          console.log(selection);
-          alert('You selected yo mamma');
+          var selection = map.getSelection()[0];
+          // console.log(selection);
+          if (selection) {
+            // console.log(selection.row);
+            if (countrySelection != data.getValue(selection.row, 0)) {
+              countrySelection = data.getValue(selection.row, 0);
+              console.info("The user selected", countrySelection);
+            }
+            else {
+              countrySelection = undefined;
+              console.info("The user selected Europe");
+            }
+            drawRegionsMap();
+            // alert('The user selected ' + value);
+          }
         }
         google.visualization.events.addListener(map, 'select', myClickHandler);
         map.draw(data, optionsMap);
@@ -126,9 +156,8 @@
         return -1;
       }
 
-      /*  The `buildTable()` function is responsible for creating a new table of data 
-          based on the selected energy type and scale. */
-      function buildTable() {
+      // The `buildTable` function takes a scale as input and creates a table of data for the map.
+      function buildTable(scale) {
         var table = [];
         var col = findCol(energyType.value);
         // If there is no data for the energy type return a table with no data
@@ -137,7 +166,7 @@
         }
         // Else if there is data and the scale is set to linear build a new table 
         // with only the column for the country names and the requested energy type
-        else if (scale.value == "Linear") {
+        else if (scale == "Linear") {
           table.push([input_data[0][0], input_data[0][col] + " [MW]"]);
           for (var i = 1; i < input_data.length; i++) {
             if(input_data[i][col]!=-1){
@@ -148,11 +177,18 @@
         // Else the scale is set to logarithmic, the data value is now an object with
         // a value v that is log10 of the original value and a formatted value f that
         // v is used for the color scale, f is used for the tooltip
-        else {
+        else if (scale == "Logarithmic") {
           table.push([input_data[0][0], input_data[0][col] + " [MW]"]);
           for (var i = 1; i < input_data.length; i++) {
             if(input_data[i][col]!=-1){
-              let value = {v: Math.log10(input_data[i][col]), f: input_data[i][col]};
+              let logVal;
+              if (input_data[i][col] != 0) {
+                logVal = Math.log10(input_data[i][col]);
+              }
+              else {
+                logVal = 0;
+              }
+              let value = {v: logVal, f: input_data[i][col]};
               table.push([input_data[i][0], value]);
             }
           }
@@ -161,34 +197,28 @@
         return table;
       }
 
-      function drawPieChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
-        ]);
-
-        var options = {
-          title: 'My Daily Activities',
-          pieHole: 0.4,
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-        chart.draw(data, options);
-      }
-
-
+      // The `createPieChartTable` function takes a country as input and creates a table of data for a pie chart.
       function createPieChartTable(country) {
-        let row = findRow(country);
-        let table = [];
-        for (var i = 0; i < input_data[0].length; i++) {
-          table.push([input_data[0][i], input_data[row][i]]);
+        if (country) {
+          let row = findRow(country);
+          let table = [];
+          for (var i = 0; i < input_data[0].length; i++) {
+            if (input_data[row][i] != -1) {
+              table.push([input_data[0][i], input_data[row][i]]);
+            }
+          }
+          console.log(table);
+          return table;
         }
-        console.log(table);
-        return table;
+        else {
+          let table = [];
+          table.push([input_data[0][0], input_data[0][col] + " [MW]"]);
+          for (var i = 1; i < input_data.length; i++) {
+            if(input_data[i][col]!=-1){
+              table.push([input_data[i][0], input_data[i][col]]);
+            }
+          }
+        }
       }
 
       function findRow(country) {
@@ -201,6 +231,8 @@
         console.info("No data for country", "\"" + country + "\"");
         return -1;
       }
+
+
     </script>
   </head>
   <body>
