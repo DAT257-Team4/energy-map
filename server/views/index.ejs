@@ -140,7 +140,9 @@
         else if (scale.value == "Linear") {
           table.push([input_data[0][0], input_data[0][col] + " [MW]"]);
           for (var i = 1; i < input_data.length; i++) {
-            table.push([input_data[i][0], input_data[i][col]]);
+            if(input_data[i][col]!=-1){
+              table.push([input_data[i][0], input_data[i][col]]);
+            }
           }
         }
         // Else the scale is set to logarithmic, the data value is now an object with
@@ -149,8 +151,10 @@
         else {
           table.push([input_data[0][0], input_data[0][col] + " [MW]"]);
           for (var i = 1; i < input_data.length; i++) {
-            let value = {v: Math.log10(input_data[i][col]), f: input_data[i][col]};
-            table.push([input_data[i][0], value]);
+            if(input_data[i][col]!=-1){
+              let value = {v: Math.log10(input_data[i][col]), f: input_data[i][col]};
+              table.push([input_data[i][0], value]);
+            }
           }
         }
         console.log(table);
