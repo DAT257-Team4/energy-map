@@ -42,8 +42,8 @@
     <!-- MAIN CONTENT -->
     <main class="d-flex flex-grow-1">
       <!-- MAP CONTAINER -->
-      <section class="position-relative flex-grow-1">
-        <!--<div id="regions_div"></div>-->
+      <section class="position-relative flex-grow-1 h-100">
+        <div id="regions_div" class="position-absolute w-100"></div>
         <div class="position-absolute d-flex flex-column" style="top: 0; right: 0;">
           <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <button class="nav-link border border-end-0 rounded-end-0 active" id="v-pills-data-tab" data-bs-toggle="pill" data-bs-target="#v-pills-data" type="button" role="tab" aria-controls="v-pills-data" aria-selected="false">
@@ -60,7 +60,7 @@
       </section>
 
       <!-- SIDEBAR -->
-      <aside class="border-start" style="width: 300px; height: 100%;">
+      <aside class="border-start h-100" style="flex-basis: 300px;">
         <div class="tab-content" id="v-pills-tabContent">
           <div class="container tab-pane fade show active" id="v-pills-data" role="tabpanel" aria-labelledby="v-pills-data-tab">
             Country
