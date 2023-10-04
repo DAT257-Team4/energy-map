@@ -101,3 +101,5 @@ function buildTable() {
   console.log(table);
   return table;
 }
+
+window.addEventListener('resize', drawRegionsMap, false);

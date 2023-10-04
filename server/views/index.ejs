@@ -22,14 +22,14 @@
 
     <!-- NAVIGATION BAR  -->
     <header class="container-fluid border-bottom p-0">
-      <nav class="navbar navbar-expand navbar-light bg-light px-4 w-100" style="height: 60px;">
-        <a class="navbar-brand d-flex align-items-center" href="#">
+      <nav class="navbar navbar-expand px-2 w-100" style="height: 60px;">
+        <a class="navbar-brand d-flex align-items-center px-2" href="#">
           <img src="/images/favicon.png" height="36px" width="36px">
           <p class="my-auto ms-2">EnergyMap</p>
         </a>
         <div class="navbar-collapse">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
+            <li class="nav-item px-2">
               <a class="nav-link" target="_blank" rel="noopener noreferrer" href="https://github.com/DAT257-Team4/energy-map">
                 <i class="bi bi-github fs-4"></i>
               </a>
@@ -43,6 +43,7 @@
     <main class="d-flex flex-grow-1">
       <!-- MAP CONTAINER -->
       <section class="position-relative flex-grow-1">
+        <!--<div id="regions_div"></div>-->
         <div class="position-absolute d-flex flex-column" style="top: 0; right: 0;">
           <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
             <button class="nav-link border border-end-0 rounded-end-0 active" id="v-pills-data-tab" data-bs-toggle="pill" data-bs-target="#v-pills-data" type="button" role="tab" aria-controls="v-pills-data" aria-selected="false">
@@ -61,59 +62,51 @@
       <!-- SIDEBAR -->
       <aside class="border-start" style="width: 300px; height: 100%;">
         <div class="tab-content" id="v-pills-tabContent">
-          <div class="container tab-pane fade show active" id="v-pills-data" role="tabpanel" aria-labelledby="v-pills-data-tab">Data</div>
-          <div class="container tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">Settings</div>
+          <div class="container tab-pane fade show active" id="v-pills-data" role="tabpanel" aria-labelledby="v-pills-data-tab">
+            Country
+            <form>
+              <label for="energyType">Choose an energyType:</label>
+              <select name="energyType" id="energyType">
+                <option value="Mixed">Mixed</option>
+                <option value="Generation">Generation</option>
+                <option value="Load">Load</option>
+                <option value="Biomass">Biomass</option>
+                <option value="Fossil Brown coal/Lignite">Fossil Brown coal/Lignite</option>
+                <option value="Fossil Coal-derived gas">Fossil Coal-derived gas</option>
+                <option value="Fossil Gas">Fossil Gas</option>
+                <option value="Fossil Hard coal">Fossil HardCoal</option>
+                <option value="Fossil Oil">Fossil Oil</option>
+                <option value="Fossil Oil shale">Fossil Oil Shale</option>
+                <option value="Fossil Peat">Fossil Peat</option>
+                <option value="Geothermal">Geothermal</option>
+                <option value="Hydro Pumped Storage">Hydro Pumped Storage</option>
+                <option value="Hydro Run-of-river and poundage">Hydro Run-of-river and poundage</option>
+                <option value="Hydro Water Reservoir">Hydro Water Reservoir</option>
+                <option value="Marine">Marine</option>
+                <option value="Nuclear">Nuclear</option>
+                <option value="Solar" selected="selected">Solar</option>
+                <option value="Waste">Waste</option>
+                <option value="Wind Offshore">Wind Offshore</option>
+                <option value="Wind Onshore">Wind Onshore</option>
+                <option value="Other renewable">Other renewable</option>
+                <option value="Other">Other</option>
+              </select>
+            </form>
+          </div>
+          <div class="container tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+            Settings
+            <form>
+              <label for="colorScale">Chose color scale (tooltip always shows real value):</label>
+              <select name="colorScale" id="colorScale">
+                <option value="Linear" selected="selected">Linear</option>
+                <option value="Logarithmic">Logarithmic</option>
+              </select>
+            </form>
+          </div>
           <div class="container tab-pane fade" id="v-pills-about" role="tabpanel" aria-labelledby="v-pills-about-tab">About</div>
         </div>
       </aside>
     </main>
-
-
-    <!--<div class="container">
-      <div class="container">
-        <div class="index-goe">
-          <div id="regions_div" style="width: 80%; height: 80%"></div>
-        </div>
-      </div>
-      <div class="container">
-        <form>
-          <label for="energyType">Choose an energyType:</label>
-          <select name="energyType" id="energyType">
-            <option value="Mixed">Mixed</option>
-            <option value="Generation">Generation</option>
-            <option value="Load">Load</option>
-            <option value="Biomass">Biomass</option>
-            <option value="Fossil Brown coal/Lignite">Fossil Brown coal/Lignite</option>
-            <option value="Fossil Coal-derived gas">Fossil Coal-derived gas</option>
-            <option value="Fossil Gas">Fossil Gas</option>
-            <option value="Fossil Hard coal">Fossil HardCoal</option>
-            <option value="Fossil Oil">Fossil Oil</option>
-            <option value="Fossil Oil shale">Fossil Oil Shale</option>
-            <option value="Fossil Peat">Fossil Peat</option>
-            <option value="Geothermal">Geothermal</option>
-            <option value="Hydro Pumped Storage">Hydro Pumped Storage</option>
-            <option value="Hydro Run-of-river and poundage">Hydro Run-of-river and poundage</option>
-            <option value="Hydro Water Reservoir">Hydro Water Reservoir</option>
-            <option value="Marine">Marine</option>
-            <option value="Nuclear">Nuclear</option>
-            <option value="Solar" selected="selected">Solar</option>
-            <option value="Waste">Waste</option>
-            <option value="Wind Offshore">Wind Offshore</option>
-            <option value="Wind Onshore">Wind Onshore</option>
-            <option value="Other renewable">Other renewable</option>
-            <option value="Other">Other</option>
-          </select>
-        </form>
-
-        <form>
-          <label for="colorScale">Chose color scale (tooltip always shows real value):</label>
-          <select name="colorScale" id="colorScale">
-            <option value="Linear" selected="selected">Linear</option>
-            <option value="Logarithmic">Logarithmic</option>
-          </select>
-        </form>
-      </div>
-    </div>
 
     <script>
       // update the map if the user changes the energy type or the color scale
@@ -127,8 +120,5 @@
       energyType.onchange = onChange;
       onChange();
     </script>
-    <!-- <div class="center_regions">
-      <div class="regions_div" id="regions_div"></div>
-    </div> -->
   </body>
 </html>
