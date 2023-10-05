@@ -7,7 +7,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class DBupdate {
-
+    /**
+     * Updates energy production values in the database for specified countries and energy types.
+     */
     public static void updateValues(){
 
         Connection conn = null; 
@@ -72,9 +74,9 @@ public class DBupdate {
      * This function execute the query to add the values to the DB
      * @param country   The country
      * @param energySource  The energy source name
-     * @param value     The value
+     * @param value     The energy production value.
      * @param statement The statament connection to the DB
-     * @throws SQLException 
+     * @throws SQLException If a database access error occurs
      */
     private static void InsertValueToDB(String country, String energySource, int value, Statement statement) throws SQLException{
         String q="REPLACE INTO `EnergyProduction`  VALUES ('"+country+"','"+energySource+"', "+value+")";        
