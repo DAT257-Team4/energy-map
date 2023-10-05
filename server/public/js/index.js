@@ -97,9 +97,9 @@ function drawRegionsMap() {
   activeMapIndex = (activeMapIndex + 1) % mapContainers.length;
   const map = new google.visualization.GeoChart(mapContainers[activeMapIndex]);
 
-  mapContainers[activeMapIndex].style.zIndex = 1;
+  mapContainers[activeMapIndex].style.zIndex = -1;
   map.draw(data, options);
-  mapContainers[prevMapIndex].style.zIndex = 0;
+  mapContainers[prevMapIndex].style.zIndex = -2;
 }
 
 // find the column index of the requested energy type
