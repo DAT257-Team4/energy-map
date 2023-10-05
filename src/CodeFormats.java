@@ -1,7 +1,12 @@
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * A class that contains information about country codes, energy formats, and reverse energy formats.
+ */
 public class CodeFormats {
+    /**
+     * List of country codes.
+     */
     public final static String []COUNTRY_LIST={"Albania","Armenia","Austria","Azerbaijan","Belarus","Belgium","Bosnia and Herz.","Bulgaria","Croatia","Cyprus","Czech Republic","Denmark","Estonia","Finland","France","Georgia","Germany","Greece","Hungary","Iceland ","Ireland","Italy","Kosovo","Latvia","Lithuania","Luxembourg","Malta ","Moldova","Montenegro","Netherlands","North Macedonia","Norway","Poland","Portugal","Romania","Russia","Serbia","Slovakia","Slovenia","Spain","Sweden","Switzerland","Turkey","Ukraine","United Kingdom"};
 
     final public static Map<String, String> COUN_MAP = new HashMap<>(){{
@@ -51,7 +56,9 @@ public class CodeFormats {
         put("ukraine", "10Y1001C--00003F");
         put("united kingdom","10Y1001A1001A92E");
     }};
-
+    /**
+     * mapping energy formats to codes.
+     */
     final public static Map<String, String> ENERGY_MAP = new HashMap<>(){{
         put("mixed","A03");
         put("generation","A04");
@@ -81,7 +88,9 @@ public class CodeFormats {
         put("substation","B23");
         put("transformer","B24");
     }};
-
+    /**
+     * mapping codes to energy formats (reverse mapping).
+     */
     final public static Map<String, String> REVERSE_ENERGY_MAP = new HashMap<>(){{
         put("A03", "mixed");
         put("A04", "generation");
