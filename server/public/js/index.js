@@ -7,6 +7,8 @@ const countryMappings = {
 };
 const inputData = JSON.parse(data);
 
+let themeToggle = document.getElementById("theme-toggle");
+
 let mapContainers = [];
 let activeMapIndex = 0;
 
@@ -29,7 +31,38 @@ document.addEventListener("DOMContentLoaded", function() {
   google.charts.setOnLoadCallback(() => {
     drawRegionsMap();
   });
+
+  themeToggle = document.getElementById("theme-toggle");
+  themeToggle.addEventListener("click", toggleTheme);
 })
+
+let darkMode = false;
+
+function toggleTheme() {
+  darkMode = !darkMode;
+
+  themeToggle.classList.toggle('toggled');
+
+  const currentTheme = document.body.getAttribute("data-bs-theme");
+
+  if (currentTheme === "light") {
+      document.body.setAttribute("data-bs-theme", "dark");
+  } else {
+      document.body.setAttribute("data-bs-theme", "light");
+  }
+
+  // Toggle custom background classes
+  const elements = document.querySelectorAll('.bg, .bg');
+  elements.forEach((element) => {
+      if (darkMode) {
+          element.classList.remove('bg-light');
+          element.classList.add('bg-dark');
+      } else {
+          element.classList.remove('bg-dark');
+          element.classList.add('bg-light');
+      }
+  });
+}
 
 function onSettingsChanged() {
   console.info("Selected:", scaleSelection.value, energyTypeSelection.value);
