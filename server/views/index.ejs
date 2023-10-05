@@ -144,6 +144,35 @@
         console.log(table);
         return table;
       }
+
+      //Responsible for dividing the energy data into two categories: renewable and non-renewable.
+      function divideRenewableAndNot(data) {
+        let renewable = ["Geothermal", "Hydro Pumped Storage", "Hydro Run-of-river and poundage", 
+          "Hydro Water Reservoir", "Marine", "Other renewable", "Solar", "Wind Offshore", "Wind Onshore"];
+        let nonRenewable = ["Biomass", "Fossil Brown coal/Lignite", "Fossil Coal-derived gas", 
+          "Fossil Gas", "Fossil Hard coal", "Fossil Oil", "Fossil Oil shale", "Fossil Peat", "Nuclear", "Waste", "Other"];
+        let sortedArray = [["Renewable", "Non Renewable"], [0,0]];
+
+        // Loop through the data and add the values to the appropriate array
+        for (var i = 1; i < data.length; i++) {
+          let row = data[i];
+          for (var col = 1; col < row.length; col ++) {
+            if (row[col] != -1) {
+              if (renewable.includes(data[0][col])) {
+                sortedArray[1][0] += row[col];
+              }
+              if (nonRenewable.includes(data[0][col])) {
+                sortedArray[1][1] += row[col];
+              }
+            }
+          }
+        }
+
+        console.log(sortedArray);
+        // Return the arrays
+        return sortedArray;
+      }
+
     </script>
   </head>
   <body>
