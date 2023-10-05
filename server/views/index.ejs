@@ -107,18 +107,5 @@
         </div>
       </aside>
     </main>
-
-    <script>
-      // update the map if the user changes the energy type or the color scale
-      var scale = document.getElementById("colorScale");
-      var energyType = document.getElementById("energyType");
-      function onChange() {
-        console.info("Selected:", scale.value, energyType.value);
-        drawRegionsMap();
-      }
-      scale.onchange = onChange;
-      energyType.onchange = onChange;
-      onChange();
-    </script>
   </body>
 </html>
