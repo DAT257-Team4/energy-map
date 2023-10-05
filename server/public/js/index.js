@@ -1,6 +1,5 @@
 let scaleSelection;
 let energyTypeSelection;
-let mapContainer;
 const countryMappings = {
   'Bosnia and Herz.': 'Bosnia and Herzegovina',
   'North Macedonia': 'Macedonia',
@@ -8,10 +7,16 @@ const countryMappings = {
 };
 const inputData = JSON.parse(data);
 
+let mapContainers = [];
+let activeMapIndex = 0;
+
+
 document.addEventListener("DOMContentLoaded", function() {
   scaleSelection = document.getElementById("colorScale");
   energyTypeSelection = document.getElementById("energyType");
-  mapContainer = document.getElementById("regions_div");
+  
+  mapContainers.push(document.getElementById("regions_div_1"));
+  mapContainers.push(document.getElementById("regions_div_2"));
 
   scaleSelection.addEventListener("change", onSettingsChanged);
   energyTypeSelection.addEventListener("change", onSettingsChanged);
@@ -56,7 +61,9 @@ function drawRegionsMap() {
   };
 
   // Create the map and render it in the specified container
-  const map = new google.visualization.GeoChart(mapContainer);
+  activeMapIndex = (activeMapIndex + 1) % mapContainers.length;
+  const map = new google.visualization.GeoChart(mapContainers[activeMapIndex]);
+
   map.draw(data, options);
 }
 
