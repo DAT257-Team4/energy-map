@@ -51,8 +51,7 @@ function toggleTheme() {
       document.body.setAttribute("data-bs-theme", "light");
   }
 
-  // Toggle custom background classes
-  const elements = document.querySelectorAll('.bg, .bg');
+  const elements = document.querySelectorAll('.bg');
   elements.forEach((element) => {
       if (darkMode) {
           element.classList.remove('bg-light');
@@ -93,11 +92,14 @@ function drawRegionsMap() {
     datalessRegionColor: "#a6a6a6",
   };
 
-  // Create the map and render it in the specified container
+  // Create the map and render it in the specified 
+  let prevMapIndex = activeMapIndex;
   activeMapIndex = (activeMapIndex + 1) % mapContainers.length;
   const map = new google.visualization.GeoChart(mapContainers[activeMapIndex]);
 
+  mapContainers[activeMapIndex].style.zIndex = 1;
   map.draw(data, options);
+  mapContainers[prevMapIndex].style.zIndex = 0;
 }
 
 // find the column index of the requested energy type
