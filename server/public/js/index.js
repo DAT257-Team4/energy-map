@@ -8,6 +8,7 @@ const countryMappings = {
 const inputData = JSON.parse(data);
 
 let themeToggle = document.getElementById("theme-toggle");
+let darkMode = false;
 
 let mapContainers = [];
 let activeMapIndex = 0;
@@ -34,18 +35,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
   themeToggle = document.getElementById("theme-toggle");
   themeToggle.addEventListener("click", toggleTheme);
-})
 
-let darkMode = false;
+  if (window.matchMedia) {
+    if(window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      toggleTheme();
+    }
+  }
+});
 
 function toggleTheme() {
   darkMode = !darkMode;
 
   themeToggle.classList.toggle('toggled');
-
-  const currentTheme = document.body.getAttribute("data-bs-theme");
-
-  if (currentTheme === "light") {
+  
+  if (darkMode) {
       document.body.setAttribute("data-bs-theme", "dark");
   } else {
       document.body.setAttribute("data-bs-theme", "light");
