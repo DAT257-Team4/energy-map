@@ -13,6 +13,10 @@ let darkMode = false;
 let mapContainers = [];
 let activeMapIndex = 0;
 
+let pubBackgroundColor = "rgb(54, 57, 62)";
+
+let countrySelection = undefined;
+
 
 document.addEventListener("DOMContentLoaded", function() {
   scaleSelection = document.getElementById("colorScale");
@@ -27,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
   window.addEventListener('resize', drawRegionsMap, false);
 
   google.charts.load("current", {
-    packages: ["geochart"]
+    packages: ["geochart", "corechart"]
   });
   google.charts.setOnLoadCallback(() => {
     drawRegionsMap();
@@ -71,6 +75,12 @@ function onSettingsChanged() {
   drawRegionsMap();
 }
 
+
+function fixID(n){
+  if(n<0)
+    return 0;
+  return n;
+}
 function drawRegionsMap() {
   if (!google.visualization) {
     console.error("Google Visualization API not loaded");
@@ -86,22 +96,64 @@ function drawRegionsMap() {
 
   // Convert the input data to a DataTable
   const data = google.visualization.arrayToDataTable(buildTable());
+  if (countrySelection) {
+    var pieData = google.visualization.arrayToDataTable(createPieChartTable(countrySelection));
+  }
+  else {
+    var pieData = google.visualization.arrayToDataTable(buildTable("Linear"));
+  }
 
   // Options for the map
-  const options = {
+  var optionsMap = {
+    dataMode: 'regions',
     region: "150", //europe
     backgroundColor: "#212969",
-    colorAxis: { minValue: 0, scaleType: 'log' },
+    colorAxis: {minValue: 0},
     datalessRegionColor: "#a6a6a6",
   };
+
+  // Options for the piechart
+  var optionsPie = {
+    title: countrySelection? countrySelection : "Europe",
+    titleTextStyle: { color: "white",
+      //fontName:,
+      fontSize: 30,
+      bold: true},
+    pieHole: 0.4,
+    backgroundColor: pubBackgroundColor,
+    legend: {textStyle: {color: 'white'}},
+    pieSliceBorderColor: pubBackgroundColor,
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+  chart.draw(pieData, optionsPie);
 
   // Create the map and render it in the specified 
   let prevMapIndex = activeMapIndex;
   activeMapIndex = (activeMapIndex + 1) % mapContainers.length;
   const map = new google.visualization.GeoChart(mapContainers[activeMapIndex]);
 
+  function countryClickHandler(){
+    var selection = map.getSelection()[0];
+    // console.log(selection);
+    if (selection) {
+      // console.log(selection.row);
+      if (countrySelection != data.getValue(selection.row, 0)) {
+        countrySelection = data.getValue(selection.row, 0);
+        console.info("The user selected", countrySelection);
+      }
+      else {
+        countrySelection = undefined;
+        console.info("The user selected Europe");
+      }
+      drawRegionsMap();
+      // alert('The user selected ' + value);
+    }
+  }
+  google.visualization.events.addListener(map, 'select', countryClickHandler);
+
   mapContainers[activeMapIndex].style.zIndex = -1;
-  map.draw(data, options);
+  map.draw(data, optionsMap);
   mapContainers[prevMapIndex].style.zIndex = -2;
 }
 
@@ -115,6 +167,66 @@ function findCol(energyType) {
   return index;
 }
 
+// The `createPieChartTable` function takes a country as input and creates a table of data for a pie chart.
+function createPieChartTable(country) {
+  if (country) {
+    let row = findRow(country);
+    let table = [];
+    for (var i = 0; i < inputData[0].length; i++) {
+      if (inputData[row][i] != -1) {
+        table.push([inputData[0][i], inputData[row][i]]);
+      }
+    }
+    console.log(table);
+    return table;
+  }
+  else {
+    let table = [];
+    table.push([inputData[0][0], inputData[0][col] + " [MW]"]);
+    for (var i = 1; i < inputData.length; i++) {
+      if(inputData[i][col]!=-1){
+        table.push([inputData[i][0], inputData[i][col]]);
+      }
+    }
+  }
+}
+
+function findRow(country) {
+  for (var i = 0; i < inputData.length; i++) {
+    if (inputData[i][0] == country) {
+      return i;
+    }
+  }
+  // If there is no data return -1
+  console.info("No data for country", "\"" + country + "\"");
+  return -1;
+}
+
+// removes countries that have no data at all
+function removeNoData() {
+  let tempArr = [];
+  tempArr[0] = inputData[0];
+  let tempArrIndex = 1;
+  for (var i = 1; i < inputData.length; i++) {
+    if (sumArrayIndex(inputData[i], 1, inputData[i].length) != 0) {
+      tempArr[tempArrIndex] = inputData[i];
+      tempArrIndex++;
+    }
+  }
+  console.info("Removed countries with no data");
+  console.log(inputData);
+  return tempArr;
+}
+
+// summs all elements in an array between startIndex and endIndex
+function sumArrayIndex(arr, startIndex, endIndex) {
+  let sum = 0;
+  for (var i = startIndex; i < endIndex; i++) {
+    sum += arr[i];
+  }
+  return sum;
+}
+
 function buildTable() {
   const col = findCol(energyType.value);
   // if there is no data for the energy type return a table with no data
@@ -125,8 +237,13 @@ function buildTable() {
   const table = [[inputData[0][0], `${inputData[0][col]} [MW]`]];
   for (let i = 1; i < inputData.length; i++)
   {
-    const value = (scaleSelection.value === "Linear") ? inputData[i][col] : {v: Math.log10(inputData[i][col]), f: inputData[i][col]};
-    table.push([inputData[i][0], value]);
+    const value = (scaleSelection.value === "Linear") ? inputData[i][col] : {v: Math.log10(fixID(inputData[i][col])), f: inputData[i][col]};
+    console.log(value);
+    if (value >= 0)
+    {
+      table.push([inputData[i][0], value]);
+    }
+    
   }
 
   return table;

@@ -14,7 +14,7 @@ public class ResultMultipleSources {
 
 
     public ResultMultipleSources(String country) throws IOException {
-        values=new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        values=new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
         this.country=country;
         updateValues(country);
     }
