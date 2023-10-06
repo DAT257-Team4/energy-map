@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.List;
 
 public class ResultMultipleSources {
@@ -20,7 +19,7 @@ public class ResultMultipleSources {
      * @param country country to be queried
      */
     public void updateValues(String country) {
-        List<String> results = JDBCQuery.SqlQuery(country);
+        List<String> results = JDBCQuery.SqlQuery(country, DBupdate.dbURL);
 
         for (int i = 0; i < results.size(); i+=2) {
             int position;

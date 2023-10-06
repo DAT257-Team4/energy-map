@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,10 +32,10 @@ public class CLI {
             List<String> results;
             int result;
             if (!energyType.isEmpty()) {
-                result = JDBCQuery.SqlQuery(country, energyType);
+                result = JDBCQuery.SqlQuery(country, energyType, DBupdate.dbURL);
                 System.out.println(energyType + " production in country " + country + " equals " + result);
             } else {
-                results = JDBCQuery.SqlQuery(country);
+                results = JDBCQuery.SqlQuery(country, DBupdate.dbURL);
                 for (String s : results) {
                     System.out.println(s);
                 }

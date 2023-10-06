@@ -4,7 +4,7 @@ import java.util.List;
 
 public class JDBCQuery {
 
-    public static List<String> SqlQuery(String country) {
+    public static List<String> SqlQuery(String country, String url) {
         Connection connection = null;
         List<String> results = new ArrayList<>();
         try {
@@ -12,7 +12,6 @@ public class JDBCQuery {
             Class.forName("org.sqlite.JDBC");
 
             // Connect to the SQLite database
-            String url = DBupdate.dbURL;
             connection = DriverManager.getConnection(url);
 
             if (connection != null) {
@@ -59,7 +58,7 @@ public class JDBCQuery {
         return results;
     }
 
-    public static int SqlQuery(String country, String energyType) {
+    public static int SqlQuery(String country, String energyType, String url) {
         Connection connection = null;
         int quantity = -1;
         try {
@@ -67,7 +66,6 @@ public class JDBCQuery {
             Class.forName("org.sqlite.JDBC");
 
             // Connect to the SQLite database
-            String url = DBupdate.dbURL;
             connection = DriverManager.getConnection(url);
 
             if (connection != null) {

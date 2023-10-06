@@ -18,6 +18,6 @@ public class ResultOfQuery {
      * @param source energy type to be queried
      */
     public void updateValue(String country, String source) {
-        value = JDBCQuery.SqlQuery(country.toLowerCase().trim(), source.toLowerCase().trim());
+        value = JDBCQuery.SqlQuery(country.toLowerCase().trim(), source.toLowerCase().trim(), DBupdate.dbURL);
     }
 }
