@@ -3,7 +3,7 @@ import org.junit.Test;
 public class ApiRequestTest {
 
     /**
-     * Simple checks that the factory returns anything
+     * Simply checks that the factory returns anything
      */
     @Test
     public void apiRequestFactoryTest() {

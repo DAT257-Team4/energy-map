@@ -13,18 +13,17 @@ public class XmlQuery {
 
     /**
      * Takes the XML received from the API and extracts the energy type and corresponding quantity into a nodelist
-     * @param xmlIn The XML received as an InputStream from the API
+     * @param xml The XML received as an InputStream from the API
      * @return A list of nodes containing energy types and quantities
      * @throws IOException
      */
-    public static NodeList QueryXMLForEnergyValues(InputStream xmlIn) throws IOException {
-        StringBuilder xmlOut = inputStreamToString(xmlIn);
+    public static NodeList QueryXMLForEnergyValues(String xml) throws IOException {
 
         //xpath is used for querying the XML
         XPathFactory xpathFactory = XPathFactory.newInstance();
         XPath xpath = xpathFactory.newXPath();
 
-        InputSource source = new InputSource(new StringReader(xmlOut.toString()));
+        InputSource source = new InputSource(new StringReader(xml.toString()));
         String namespace;
 
         //Retrieves the namespace
@@ -56,7 +55,7 @@ public class XmlQuery {
         });
 
         //Re-opens the InputSource
-        source = new InputSource(new StringReader(xmlOut.toString()));
+        source = new InputSource(new StringReader(xml.toString()));
 
         NodeList nodes;
         try {
@@ -74,7 +73,7 @@ public class XmlQuery {
      * @return StringBuilder object with the contents of the InputStream
      * @throws IOException
      */
-    private static StringBuilder inputStreamToString(InputStream in) throws IOException {
+    public static String inputStreamToString(InputStream in) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         StringBuilder out = new StringBuilder();
         String newLine = System.getProperty("line.separator");
@@ -85,6 +84,6 @@ public class XmlQuery {
         }
         in.close();
 
-        return out;
+        return out.toString();
     }
 }
