@@ -8,7 +8,7 @@ import org.w3c.dom.NodeList;
 
 public class DBupdate {
 
-    public static String dbURL = "jdbc:sqlite:server/db/energy-production-db";
+    public static String dbURL = "jdbc:sqlite:db/energy-production-db";
 
     /**
      * Updates energy production values in the database for specified countries and energy types.
