@@ -27,7 +27,7 @@ public class DBupdate {
             for (String country : countries) {
                 ApiRequest req= ApiRequest.ApiReqForEnergySource("all",country);
                 try{
-                    NodeList listRes=XmlQuery.QueryXMLForEnergyValues(GetAPIData.sendAPIRequest(req));
+                    NodeList listRes=XmlQuery.QueryXMLForEnergyValues(XmlQuery.inputStreamToString(GetAPIData.sendAPIRequest(req)));
                     
                     int i=0;
                     deletePreviousData(country, statement);
