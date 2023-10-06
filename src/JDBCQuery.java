@@ -12,7 +12,7 @@ public class JDBCQuery {
             Class.forName("org.sqlite.JDBC");
 
             // Connect to the SQLite database
-            String url = "jdbc:sqlite:db/energy-production-db";
+            String url = DBupdate.dbURL;
             connection = DriverManager.getConnection(url);
 
             if (connection != null) {
@@ -67,7 +67,7 @@ public class JDBCQuery {
             Class.forName("org.sqlite.JDBC");
 
             // Connect to the SQLite database
-            String url = "jdbc:sqlite:db/energy-production-db";
+            String url = DBupdate.dbURL;
             connection = DriverManager.getConnection(url);
 
             if (connection != null) {

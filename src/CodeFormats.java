@@ -7,7 +7,12 @@ public class CodeFormats {
     /**
      * List of country codes.
      */
-    public final static String []COUNTRY_LIST={"Albania","Armenia","Austria","Azerbaijan","Belarus","Belgium","Bosnia and Herz.","Bulgaria","Croatia","Cyprus","Czech Republic","Denmark","Estonia","Finland","France","Georgia","Germany","Greece","Hungary","Iceland ","Ireland","Italy","Kosovo","Latvia","Lithuania","Luxembourg","Malta ","Moldova","Montenegro","Netherlands","North Macedonia","Norway","Poland","Portugal","Romania","Russia","Serbia","Slovakia","Slovenia","Spain","Sweden","Switzerland","Turkey","Ukraine","United Kingdom"};
+    public final static String []COUNTRY_LIST={"albania","armenia","austria","azerbaijan","belarus","belgium",
+            "bosnia and herz.","bulgaria","croatia","cyprus","czech republic","denmark","estonia","finland",
+            "france","georgia","germany","greece","hungary","iceland ","ireland","italy","kosovo","latvia",
+            "lithuania","luxembourg","malta ","moldova","montenegro","netherlands","north macedonia","norway",
+            "poland","portugal","romania","russia","serbia","slovakia","slovenia","spain","sweden","switzerland",
+            "turkey","ukraine","united kingdom"};
 
     final public static Map<String, String> COUN_MAP = new HashMap<>(){{
         put("albania", "10YAL-KESH-----5");
@@ -119,5 +124,38 @@ public class CodeFormats {
         put("B22", "dc link");
         put("B23", "substation");
         put("B24", "transformer");
+    }};
+
+    /**
+     * Maps energy types to a specific position in array used by the frontend
+     */
+    final public static Map<String, Integer> POSITION_MAP = new HashMap<>(){{
+        put("A03", 0);
+        put("A04", 1);
+        put("A05", 2);
+        put("B01", 3);
+        put("B02", 4);
+        put("B03", 5);
+        put("B04", 6);
+        put("B05", 7);
+        put("B06", 8);
+        put("B07", 9);
+        put("B08", 10);
+        put("B09", 11);
+        put("B10", 12);
+        put("B11", 13);
+        put("B12", 14);
+        put("B13", 15);
+        put("B14", 16);
+        put("B15", 17);
+        put("B16", 18);
+        put("B17", 19);
+        put("B18", 20);
+        put("B19", 21);
+        put("B20", 22);
+        put("B21", 23);
+        put("B22", 24);
+        put("B23", 25);
+        put("B24", 26);
     }};
 }

@@ -7,28 +7,22 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class DBupdate {
+
+    public static String dbURL = "jdbc:sqlite:server/db/energy-production-db";
+
     /**
      * Updates energy production values in the database for specified countries and energy types.
      */
     public static void updateValues(){
 
-        Connection conn = null; 
+        Connection conn;
         String [] countries =  CodeFormats.COUNTRY_LIST;
         
         try {
-            conn=DriverManager.getConnection("jdbc:sqlite:db/energy-production-db");
+            conn=DriverManager.getConnection(dbURL);
             Statement statement = conn.createStatement();
 
-            // SQL query to create a table
-            String createTable = "CREATE TABLE IF NOT EXISTS EnergyProduction (" +
-                    "country TEXT NOT NULL," +
-                    "energyType TEXT NOT NULL," +
-                    "quantity INT," +
-                    "PRIMARY KEY (country, energyType)" +
-                    ")";
-
-            // Execute the SQL query
-            statement.execute(createTable);
+            initDatabase(dbURL);
 
             for (String country : countries) {
                 ApiRequest req= ApiRequest.ApiReqForEnergySource("all",country);
@@ -36,7 +30,7 @@ public class DBupdate {
                     NodeList listRes=XmlQuery.QueryXMLForEnergyValues(GetAPIData.sendAPIRequest(req));
                     
                     int i=0;
-                    DeletePreviousData(country, statement);
+                    deletePreviousData(country, statement);
                     while(i<listRes.getLength()){
                         Element energyCode = (Element) listRes.item(i);
                         i++;
@@ -45,7 +39,7 @@ public class DBupdate {
                             totValue+= Integer.parseInt(((Element) listRes.item(i)).getTextContent());
                             i++;
                         }
-                        InsertValueToDB(country, CodeFormats.REVERSE_ENERGY_MAP.get(energyCode.getTextContent()),totValue,statement);
+                        insertValueToDB(country, CodeFormats.REVERSE_ENERGY_MAP.get(energyCode.getTextContent()),totValue,statement);
                     };
 
                 }catch(Exception e){
@@ -60,12 +54,37 @@ public class DBupdate {
     }
 
     /**
+     * If the database file is empty this will create the appropriate tables
+     * @param url contains the file path to the database and the SQLite driver
+     */
+    private static void initDatabase(String url) {
+        try {
+            Connection conn=DriverManager.getConnection(url);
+            Statement statement = conn.createStatement();
+
+            // SQL query to create a table
+            String createTable = "CREATE TABLE IF NOT EXISTS EnergyProduction (" +
+                    "country TEXT NOT NULL," +
+                    "energyType TEXT NOT NULL," +
+                    "quantity INT," +
+                    "PRIMARY KEY (country, energyType)" +
+                    ")";
+
+            // Execute the SQL query
+            statement.execute(createTable);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * This method take a country and a statement connection to database and remove all the values for that county
      * @param country the country
      * @param statement the statement connection to the DB
      * @throws SQLException
      */
-    private static void DeletePreviousData(String country, Statement statement) throws SQLException {
+    private static void deletePreviousData(String country, Statement statement) throws SQLException {
         String q = "DELETE FROM `EnergyProduction`  WHERE Country='"+country+"'";
         statement.executeUpdate(q);
     }
@@ -78,7 +97,7 @@ public class DBupdate {
      * @param statement The statament connection to the DB
      * @throws SQLException If a database access error occurs
      */
-    private static void InsertValueToDB(String country, String energySource, int value, Statement statement) throws SQLException{
+    private static void insertValueToDB(String country, String energySource, int value, Statement statement) throws SQLException{
         String q="REPLACE INTO `EnergyProduction`  VALUES ('"+country+"','"+energySource+"', "+value+")";        
         statement.executeUpdate(q);
     }
