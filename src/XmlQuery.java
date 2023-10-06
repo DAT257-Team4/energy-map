@@ -74,7 +74,7 @@ public class XmlQuery {
      * @return StringBuilder object with the contents of the InputStream
      * @throws IOException
      */
-    public static StringBuilder inputStreamToString(InputStream in) throws IOException {
+    private static StringBuilder inputStreamToString(InputStream in) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         StringBuilder out = new StringBuilder();
         String newLine = System.getProperty("line.separator");
