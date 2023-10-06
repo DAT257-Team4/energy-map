@@ -11,7 +11,7 @@ public class XMLQueryTest {
      * @throws IOException
      */
     @Test
-    public void XMLQueryTest() throws IOException {
+    public void XMLQueryValidInputTest() throws IOException {
         InputStream is = GetAPIData.sendAPIRequest(ApiRequest.ApiReqForEnergySource("all", "germany"));
         NodeList nl = XmlQuery.QueryXMLForEnergyValues(is);
 
@@ -24,7 +24,7 @@ public class XMLQueryTest {
      * @throws IOException
      */
     @Test
-    public void XMLQueryFailTest() throws IOException {
+    public void XMLQueryInvalidInputTest() throws IOException {
         InputStream is = GetAPIData.sendAPIRequest(ApiRequest.ApiReqForEnergySource("invalid", "invalid"));
         NodeList nl = XmlQuery.QueryXMLForEnergyValues(is);
 

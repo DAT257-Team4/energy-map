@@ -5,8 +5,8 @@ public class ResultOfQuery {
     /**
      * Object that holds the value of a single energy source of a single country.
      * Automatically queries the database on creation.
-     * @param country
-     * @param source
+     * @param country country to be queried
+     * @param source energy type to be queried
      */
     public ResultOfQuery(String country,String source){
         updateValue(country, source);

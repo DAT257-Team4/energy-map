@@ -36,11 +36,11 @@ public class DBupdate {
                         i++;
                         int totValue = 0;
                         while(i<listRes.getLength() && ((Element) listRes.item(i)).getTagName().equals("quantity")){
-                            totValue+= Integer.parseInt(((Element) listRes.item(i)).getTextContent());
+                            totValue+= Integer.parseInt((listRes.item(i)).getTextContent());
                             i++;
                         }
                         insertValueToDB(country, CodeFormats.REVERSE_ENERGY_MAP.get(energyCode.getTextContent()),totValue,statement);
-                    };
+                    }
 
                 }catch(Exception e){
                     e.printStackTrace();

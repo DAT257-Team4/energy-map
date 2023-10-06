@@ -1,14 +1,11 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Scanner;
 
 public class CLI {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         System.out.println("Do you wish to update the database?");
         System.out.println("Y/N");
