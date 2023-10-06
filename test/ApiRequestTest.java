@@ -7,8 +7,7 @@ public class ApiRequestTest {
      */
     @Test
     public void apiRequestFactoryTest() {
-        ApiRequest ap = null;
-        ap = ApiRequest.ApiReqForEnergySource("test", "test");
+        ApiRequest ap = ApiRequest.ApiReqForEnergySource("test", "test");
         assert ap != null;
     }
 }
