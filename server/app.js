@@ -27,7 +27,7 @@ const dbJob = new CronJob('15 * * * *',
   start=true, // Start job
   timeZone=null,
   context=null,
-  runOnInit=true // Run when server starts
+  runOnInit=false // Run when server starts
 );
 
 
