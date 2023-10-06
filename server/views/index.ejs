@@ -5,133 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>EnergyMap</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
     
+    <script>let data = '<%- data %>';</script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load("current", {
-        packages: ["geochart"]
-      });
-      google.charts.setOnLoadCallback(() => {
-        drawRegionsMap();
-      });
-      
-      const test_data = [
-          ["Country", "Solar", "Nuclear", "Hydro Water Reservoir", "WindOffshore", "FossilGas"],
-          ["Germany", 200, 500, 800, 600, 10000],
-          ["Sweden", 300, 600, 700, 800, 1000],
-          ["France", 400, 500, 300, 200, 100],
-          ["Italy", 200, 400, 500, 600, 10],
-          ["Spain", 300, 200, 400, 500, 0],
-          ["Greece", 400, 500, 600, 700, 0],
-        ];
-
-      let input_data = JSON.parse('<%- data %>');
-      //let values= <%- data %>
-      // let values = JSON.parse('<%- data %>');
-
-      function drawRegionsMap() {
-        // where data will be stored within the map
-
-        console.log(input_data);
-
-        // Check that the google.visualization object is defined
-        if (!google.visualization) {
-          console.error("Google Visualization API not loaded");
-          return;
-        }
-
-        var countryDict = {
-          'Bosnia and Herz.': 'Bosnia and Herzegovina',
-          'North Macedonia': 'Macedonia',
-          'Kosovo': {v: 'XK', f: 'Kosovo'}
-        };
-        for (var i = 0; i < input_data.length; i++)
-        {
-          var countryName = input_data[i][0];
-          if (countryName in countryDict)
-          {
-            input_data[i][0] = countryDict[countryName];
-          }
-        }
-
-        // Convert the input data to a DataTable
-        var data = google.visualization.arrayToDataTable(buildTable());
-
-        // Options for the map
-        var options = {
-          region: "150", //europe
-          backgroundColor: "#212969",
-          colorAxis: {minValue: 0, scaleType: 'log'},
-          datalessRegionColor: "#a6a6a6",
-        };
-
-        // Create the map and render it in the specified container
-        var container = document.getElementById("regions_div");
-        var map = new google.visualization.GeoChart(container);
-        map.draw(data, options);
-      }
-
-      // find the column index of the requested energy type
-      function findCol(value) {
-        for (var i = 0; i < input_data[0].length; i++) {
-          if (input_data[0][i] == value) {
-            return i;
-          }
-        }
-        // if there is no data return -1
-        console.info("No data for energy type", "\"" + energyType.value + "\"");
-        return -1;
-      }
-
-      function buildTable() {
-        var table = [];
-        var col = findCol(energyType.value);
-        // if there is no data for the energy type return a table with no data
-        if (col === -1) {
-          table.push([input_data[0][0], "no-data"]);
-        }
-        // else if there is data and the scale is set to linear build a new table 
-        // with only the column for the country names and the requested energy type
-        else if (scale.value == "Linear") {
-          table.push([input_data[0][0], input_data[0][col] + " [MW]"]);
-          for (var i = 1; i < input_data.length; i++) {
-            table.push([input_data[i][0], input_data[i][col]]);
-          }
-        }
-        // else the scale is set to logarithmic, the data value is now an object with
-        // a value v that is log10 of the original value and a formatted value f that
-        // v is used for the color scale, f is used for the tooltip
-        else {
-          table.push([input_data[0][0], input_data[0][col] + " [MW]"]);
-          for (var i = 1; i < input_data.length; i++) {
-            let value = {v: Math.log10(input_data[i][col]), f: input_data[i][col]};
-            table.push([input_data[i][0], value]);
-          }
-        }
-        console.log(table);
-        return table;
-      }
-    </script>
+    <script type="text/javascript" src="/js/index.js"></script>
   </head>
-  <body>
-    <div>
-      <div class="index-container">
-        <h1 class="index-text">Welcome to EnergyMap</h1>
-        <div class="index-container1">
-          <div class="index-container2">
-            <div class="index-goe">
-              <div id="regions_div" style="width: 80%; height: 80%"></div>
-            </div>
+  <body class="d-flex flex-column" data-bs-theme="light">
+    <!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
+    <!-- NAVIGATION BAR  -->
+    <header class="container-fluid border-bottom p-0">
+      <nav class="navbar navbar-expand px-2 w-100" style="height: 60px;">
+        <a class="navbar-brand d-flex align-items-center px-2" href="#">
+          <img src="/images/favicon.png" height="36px" width="36px">
+          <p class="my-auto ms-2">EnergyMap</p>
+        </a>
+        <div class="navbar-collapse">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item px-2">
+              <a class="nav-link d-flex align-items-center" target="_blank" rel="noopener noreferrer" href="https://github.com/DAT257-Team4/energy-map">
+                <i class="bi bi-github fs-4"></i>
+              </a>
+            </li>
+            <div class="vr"></div>
+            <li class="nav-item px-2 d-flex align-items-center mt-1 mx-2">
+              <button id="theme-toggle" class="btn btn-secondary rounded-pill d-flex align-items-center justify-content-start p-1 overflow-hidden toggled">
+                <i id="theme-toggle-circle" class="bi bi-circle-fill"></i>
+                <div id="theme-toggle-hider" class="rounded-circle"></div>
+              </button>
+            </li>
+          </ul>  
+        </div>
+      </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="d-flex flex-grow-1">
+      <!-- MAP CONTAINER -->
+      <section class="position-relative flex-grow-1 h-100 z-0">
+        <div id="regions_div_1" class="position-absolute w-100 h-100"></div>
+        <div id="regions_div_2" class="position-absolute w-100 h-100"></div>
+        <div class="position-absolute d-flex flex-column" style="top: 0; right: 0;">
+
+          <!-- SIDEBAR TAB BUTTONS -->
+          <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <button class="nav-link border border-end-0 rounded-end-0 bg-light bg active" id="v-pills-data-tab" data-bs-toggle="pill" data-bs-target="#v-pills-data" type="button" role="tab" aria-controls="v-pills-data" aria-selected="false">
+              <i class="bi bi-bar-chart-line"></i>
+            </button>
+            <button class="nav-link border border-end-0 rounded-end-0 bg-light bg" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">
+              <i class="bi bi-gear"></i>
+            </button>
+            <button class="nav-link border border-end-0 rounded-end-0 bg-light bg" id="v-pills-about-tab" data-bs-toggle="pill" data-bs-target="#v-pills-about" type="button" role="tab" aria-controls="v-pills-about" aria-selected="false">
+              <i class="bi bi-question-circle"></i>
+            </button>
           </div>
-          <div class="index-container3">
+        </div>
+      </section>
+
+      <!-- SIDEBAR -->
+      <aside class="border-start bg-light h-100 z-1 bg bg-light" style="flex-basis: 500px;">
+        <div class="tab-content" id="v-pills-tabContent">
+          <div class="container tab-pane fade show active position-relative" id="v-pills-data" role="tabpanel" aria-labelledby="v-pills-data-tab">
+            Click on a country to view a pie chart of the energy types produced in that country. <br>
+            Click on the same country again to return to the chart for all of Europe.
+
+            <div id="donutchart" class="position-absolute w-100 "></div>
+            
+          </div>
+          <div class="container tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+            Country
             <form>
               <label for="energyType">Choose an energyType:</label>
               <select name="energyType" id="energyType">
-                <option value="Mixed">Mixed</option>
-                <option value="Generation">Generation</option>
-                <option value="Load">Load</option>
                 <option value="Biomass">Biomass</option>
                 <option value="Fossil Brown coal/Lignite">Fossil Brown coal/Lignite</option>
                 <option value="Fossil Coal-derived gas">Fossil Coal-derived gas</option>
@@ -144,7 +96,6 @@
                 <option value="Hydro Pumped Storage">Hydro Pumped Storage</option>
                 <option value="Hydro Run-of-river and poundage">Hydro Run-of-river and poundage</option>
                 <option value="Hydro Water Reservoir">Hydro Water Reservoir</option>
-                <option value="Marine">Marine</option>
                 <option value="Nuclear">Nuclear</option>
                 <option value="Solar" selected="selected">Solar</option>
                 <option value="Waste">Waste</option>
@@ -154,7 +105,7 @@
                 <option value="Other">Other</option>
               </select>
             </form>
-
+            Settings
             <form>
               <label for="colorScale">Chose color scale (tooltip always shows real value):</label>
               <select name="colorScale" id="colorScale">
@@ -162,26 +113,13 @@
                 <option value="Logarithmic">Logarithmic</option>
               </select>
             </form>
-          </div>
-        </div>
-      </div>
-    </div>
+            <hr>
+            
 
-    <script src="index.js"></script>
-    <script>
-      // update the map if the user changes the energy type or the color scale
-      var scale = document.getElementById("colorScale");
-      var energyType = document.getElementById("energyType");
-      function onChange() {
-        console.info("Selected:", scale.value, energyType.value);
-        drawRegionsMap();
-      }
-      scale.onchange = onChange;
-      energyType.onchange = onChange;
-      onChange();
-    </script>
-    <!-- <div class="center_regions">
-      <div class="regions_div" id="regions_div"></div>
-    </div> -->
+          </div>
+          <div class="container tab-pane fade" id="v-pills-about" role="tabpanel" aria-labelledby="v-pills-about-tab">About</div>
+        </div>
+      </aside>
+    </main>
   </body>
 </html>

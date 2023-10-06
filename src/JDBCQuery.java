@@ -4,7 +4,13 @@ import java.util.List;
 
 public class JDBCQuery {
 
-    public static List<String> SqlQuery(String country) {
+    /**
+     * Queries the database and returns all values associated with a country name
+     * @param country the coutnry to be queried
+     * @param url the path to the database
+     * @return an array list with all energy and quantity values associated with the country
+     */
+    public static List<String> SqlQuery(String country, String url) {
         Connection connection = null;
         List<String> results = new ArrayList<>();
         try {
@@ -12,7 +18,6 @@ public class JDBCQuery {
             Class.forName("org.sqlite.JDBC");
 
             // Connect to the SQLite database
-            String url = "jdbc:sqlite:db/energy-production-db";
             connection = DriverManager.getConnection(url);
 
             if (connection != null) {
@@ -59,15 +64,21 @@ public class JDBCQuery {
         return results;
     }
 
-    public static int SqlQuery(String country, String energyType) {
+    /**
+     * Queries the database for the quantity of a single energytype associated with the country name
+     * @param country country to be queried
+     * @param energyType energy type to be queried
+     * @param url the location of the database
+     * @return the quantity of a single energytype produced by the country
+     */
+    public static int SqlQuery(String country, String energyType, String url) {
         Connection connection = null;
-        int quantity = 0;
+        int quantity = -1;
         try {
             // Load the SQLite JDBC driver
             Class.forName("org.sqlite.JDBC");
 
             // Connect to the SQLite database
-            String url = "jdbc:sqlite:db/energy-production-db";
             connection = DriverManager.getConnection(url);
 
             if (connection != null) {

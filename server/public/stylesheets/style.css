@@ -1,6 +1,42 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+#theme-toggle {
+  width: 48px;
+  height: 24px;
+}
+
+#theme-toggle-circle {
+  transition: transform 0.3s ease-in-out;
+}
+
+#theme-toggle-hider {
+  margin-left: -8px;
+  height: 16px;
+  width: 16px;
+  background-color: inherit;
+  transition: transform 0.3s ease-in-out;
+}
+
+.toggled #theme-toggle-circle {
+  transform: translateX(22px);
+}
+
+.toggled #theme-toggle-hider {
+  transform: translateX(32px);
+}
+
+.active {
+  background-color: var(--bs-nav-pills-link-active-bg) !important;
+}
+
+/*
 body {
   background-color: rgb(54, 57, 62);
-  /* padding: 50px; */
+  /* padding: 50px; *
   font-family: 'Poppins', sans-serif;
   color: rgb(255, 255, 255);
 }
@@ -32,7 +68,7 @@ h6 {
   margin: 0; 
   /* border: 5px solid #555; */
    /* flex-wrap: wrap;  
-} */
+} *
 
 .center_regions {
   width: 100%;
@@ -130,3 +166,4 @@ h6 {
   text-decoration:none;
 }
 
+*/
