@@ -5,7 +5,7 @@ const countryMappings = {
   'North Macedonia': 'Macedonia',
   'Kosovo': {v: 'XK', f: 'Kosovo'}
 };
-const inputData = JSON.parse(data);
+let inputData = JSON.parse(data);
 
 let themeToggle = document.getElementById("theme-toggle");
 let darkMode = false;
@@ -103,15 +103,17 @@ function drawRegionsMap() {
   });
 
   console.log(inputData);
+  inputData = removeNoData();
   // Convert the input data to a DataTable
   const data = google.visualization.arrayToDataTable(buildTable());
   if (countrySelection != "Europe") {
     var pieData = google.visualization.arrayToDataTable(createPieChartTable(countrySelection));
+    var renewableBarChartData = google.visualization.arrayToDataTable(divideRenewableAndNot(createPieChartTable(countrySelection), countrySelection));
   }
   else {
     var pieData = google.visualization.arrayToDataTable(sumProductionPerEnergyType(inputData));
+    var renewableBarChartData = google.visualization.arrayToDataTable(divideRenewableAndNot(inputData, countrySelection));
   }
-  var renewableBarChartData = google.visualization.arrayToDataTable(divideRenewableAndNot(inputData));
 
   // Options for the map
   var optionsMap = {
@@ -125,7 +127,7 @@ function drawRegionsMap() {
   const themeColor = darkMode ? bootstrapColors.textLight : bootstrapColors.textDark;
   // Options for the piechart
   var optionsPie = {
-    title: "Energy types in " + countrySelection,
+    title: "Energy types in " + (countrySelection === "XK" ? "Kosovo" : countrySelection),
     titleTextStyle: {
       color: themeColor,
       fontSize: 20,
@@ -146,7 +148,7 @@ function drawRegionsMap() {
 
   // Options for the barchart
   var optionsBar = {
-    title: "How clean is Europe's energy?",
+    title: "How clean is " + (countrySelection === "XK" ? "Kosovo" : countrySelection) + "'s energy?",
     titleTextStyle: { 
       color: themeColor,
       fontSize: 20,
@@ -156,7 +158,8 @@ function drawRegionsMap() {
     hAxis: {
       title: "Production [MW]", 
       titleTextStyle:{color: themeColor}, 
-      textStyle:{color: themeColor}
+      textStyle:{color: themeColor},
+      minValue: 0
     },
     vAxis: {
       textStyle:{color: themeColor, fontSize: 13}, 
@@ -230,8 +233,14 @@ function createPieChartTable(country) {
 }
 
 function findRow(country) {
+  console.log(country);
   for (var i = 0; i < inputData.length; i++) {
-    if (inputData[i][0] == country) {
+    if (inputData[i][0].v) {
+      if (inputData[i][0].v == country) {
+        return i;
+      }
+    }
+    else if (inputData[i][0] == country) {
       return i;
     }
   }
@@ -246,7 +255,7 @@ function removeNoData() {
   tempArr[0] = inputData[0];
   let tempArrIndex = 1;
   for (var i = 1; i < inputData.length; i++) {
-    if (sumArrayIndex(inputData[i], 1, inputData[i].length) != 0) {
+    if (sumArrayIndex(inputData[i], 1, inputData[i].length) != (-inputData[i].length+1)) {
       tempArr[tempArrIndex] = inputData[i];
       tempArrIndex++;
     }
@@ -297,10 +306,10 @@ function buildTable() {
 }
 
 // Responsible for dividing the energy data into two categories: renewable and non-renewable.
-function divideRenewableAndNot(data) {
-  let renewable = ["Geothermal", "Hydro Pumped Storage", "Hydro Run-of-river and poundage", 
+function divideRenewableAndNot(data, country) {
+  let renewable = ["Biomass", "Geothermal", "Hydro Pumped Storage", "Hydro Run-of-river and poundage", 
     "Hydro Water Reservoir", "Marine", "Other renewable", "Solar", "Wind Offshore", "Wind Onshore"];
-  let nonRenewable = ["Biomass", "Fossil Brown coal/Lignite", "Fossil Coal-derived gas", 
+  let nonRenewable = ["Fossil Brown coal/Lignite", "Fossil Coal-derived gas", 
     "Fossil Gas", "Fossil Hard coal", "Fossil Oil", "Fossil Oil shale", "Fossil Peat", "Nuclear", "Waste", "Other"];
   //let sortedArray = [["Renewable", "Non Renewable"], [0,0]];
   let sortedArray = [
@@ -308,17 +317,33 @@ function divideRenewableAndNot(data) {
     ["Renewable", 0, "green"], 
     ["Non Renewable", 0, "red"]
   ]
-
+  console.log(data);
+  console.log(country);
   // Loop through the data and add the values to the appropriate array
-  for (var i = 1; i < data.length; i++) {
-    let row = data[i];
-    for (var col = 1; col < row.length; col ++) {
-      if (row[col] != -1) {
-        if (renewable.includes(data[0][col])) {
-          sortedArray[1][1] += row[col];
+  if (country === "Europe") {
+    for (var i = 1; i < data.length; i++) {
+      let row = data[i];
+      for (var col = 1; col < row.length; col ++) {
+        if (row[col] != -1) {
+          if (renewable.includes(data[0][col])) {
+            sortedArray[1][1] += row[col];
+          }
+          if (nonRenewable.includes(data[0][col])) {
+            sortedArray[2][1] += row[col];
+          }
         }
-        if (nonRenewable.includes(data[0][col])) {
-          sortedArray[2][1] += row[col];
+      }
+    }
+  }
+  else {
+    for (var i = 1; i < data.length; i++) {
+      let row = data[i];
+      if (row[1] != -1) {
+        if (renewable.includes(row[0])) {
+          sortedArray[1][1] += row[1];
+        }
+        if (nonRenewable.includes(row[0])) {
+          sortedArray[2][1] += row[1];
         }
       }
     }
@@ -329,7 +354,7 @@ function divideRenewableAndNot(data) {
   return sortedArray;
 }
 
-
+// Responsible for summing all production of each energy type
 function sumProductionPerEnergyType(data) {
   let result = [];
   result.push(["Energy Type", "Production [MW]"]);
