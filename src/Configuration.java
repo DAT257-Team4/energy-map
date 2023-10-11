@@ -23,6 +23,7 @@ public class Configuration {
             return null;
         }
     }
+    
     static String readToken() {
         // Read the value of the environmental variable
         Map<String, String> env = System.getenv();
