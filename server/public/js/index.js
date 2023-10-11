@@ -243,6 +243,8 @@ function buildTable() {
       const value = (scaleSelection.value === "Linear") ? rawValue : {v: Math.log10(rawValue+1), f: rawValue};
       //console.log(value);
       table.push([inputData[i][0], value]);
+    }else{
+      table.push([inputData[i][0], {v:0, f: "No data"}]);
     }
   }
   console.log(table);
