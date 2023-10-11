@@ -2,8 +2,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import java.io.*;
 public class XmlView {
-
-    //Takes XML plain text stored in InputStream object and parses to String, then prints
+    /**
+     * Takes XML plain text stored in InputStream object and parses to String, then prints
+     * @param in The InputStream containing XML data
+     * @throws IOException If an I/O error occurs
+     */
     public static void PrintAsString(InputStream in) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         StringBuilder out = new StringBuilder();
@@ -17,6 +20,10 @@ public class XmlView {
         System.out.println(out);
     }
 
+    /**
+     * Prints XML query results formatted as energy codes and their corresponding values.
+     * @param results The NodeList containing the XML query results.
+     */
     public static void PrintXMLQuery (NodeList results) {
         StringBuilder queryText = new StringBuilder();
 

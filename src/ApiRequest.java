@@ -2,25 +2,48 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ApiRequest{
-    public String documentType;
-    public String processType;
-    public String In_Domain;
-    public String PsrType;
-    public String PeriodStart;
-    public String PeriodEnd;
-    public String securityToken;
-    public ApiRequest(){};
+    public final String DOCUMENT_TYPE = "A75";
+    public final String PROCESS_TYPE = "A16";
+    private String In_Domain;
+    private String PsrType;
+    private String PeriodStart;
+    private String PeriodEnd;
+    private String securityToken;
+    private ApiRequest(){}
 
+    public String getIn_Domain() {
+        return In_Domain;
+    }
+
+    public String getPsrType() {
+        return PsrType;
+    }
+
+    public String getPeriodStart() {
+        return PeriodStart;
+    }
+
+    public String getPeriodEnd() {
+        return PeriodEnd;
+    }
+
+    public String getSecurityToken() {
+        return securityToken;
+    }
+
+    /**
+     * Creates an ApiRequest object that holds all parameters for the API request
+     * @param energyType Specifies an energytype, if blank or "all" this field is ignored
+     * @param countryName Specifies a country to query, if blank or "all" this field is ignored
+     * @return ApiRequest object with all parameters set
+     */
     public static ApiRequest ApiReqForEnergySource(String energyType, String countryName){
-        ApiRequest ap =new ApiRequest();
+        ApiRequest ap = new ApiRequest();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHH00");  
-        countryName=countryName.toLowerCase();
+        countryName = countryName.toLowerCase();
         countryName.trim().equalsIgnoreCase("all");
-        
 
 
-        ap.documentType="A75";
-        ap.processType="A16";
         ap.In_Domain=CodeFormats.COUN_MAP.get(countryName);
         ap.PsrType=CodeFormats.ENERGY_MAP.get(energyType);
 

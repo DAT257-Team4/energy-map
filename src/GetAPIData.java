@@ -53,16 +53,16 @@ public class GetAPIData {
 			baseURL += '?';
 		}
 
-		baseURL = baseURL + "securityToken=" + params.securityToken + "&";
-		baseURL = baseURL + "documentType=" + params.documentType + "&";
-		baseURL = baseURL + "processType=" + params.processType + "&";
+		baseURL = baseURL + "securityToken=" + params.getSecurityToken() + "&";
+		baseURL = baseURL + "documentType=" + params.DOCUMENT_TYPE + "&";
+		baseURL = baseURL + "processType=" + params.PROCESS_TYPE + "&";
 		//If PsrType is null it will omit it and instead fetch all energy sources
-		if (params.PsrType != null) {
-			baseURL = baseURL + "PsrType=" + params.PsrType + "&";
+		if (params.getPsrType() != null) {
+			baseURL = baseURL + "PsrType=" + params.getPsrType() + "&";
 		}
-		baseURL = baseURL + "In_Domain=" + params.In_Domain + "&";
-		baseURL = baseURL + "periodStart=" + params.PeriodStart + "&";
-		baseURL = baseURL + "periodEnd=" + params.PeriodEnd;
+		baseURL = baseURL + "In_Domain=" + params.getIn_Domain() + "&";
+		baseURL = baseURL + "periodStart=" + params.getPeriodStart() + "&";
+		baseURL = baseURL + "periodEnd=" + params.getPeriodEnd();
 
 		return baseURL;
 	}

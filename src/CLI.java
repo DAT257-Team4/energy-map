@@ -1,44 +1,45 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Scanner;
 
 public class CLI {
-    public static void main(String[] args) throws IOException {
-        System.out.println("Welcome to the energy map!");
-        System.out.println("Type 'exit' to exit the program.");
-        DBupdate.updateValues();
-        /*while (true) {
-            System.out.print("Please enter a country name: ");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String country = reader.readLine().toLowerCase();
-            if (country.equals("exit")) {
-                break;
+
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Do you wish to update the database?");
+        System.out.println("Y/N");
+        String answer = input.nextLine().toLowerCase().trim();
+
+        if (answer.equals("y"))
+            DBupdate.updateValues();
+
+        String country = null;
+        String energyType;
+
+        System.out.println("Do you wish to query the database?");
+        System.out.println("Y/N");
+
+        answer = input.nextLine().toLowerCase().trim();
+        if (answer.equals("y")) {
+            while (country == null) {
+                System.out.println("Type a country name");
+                country = input.nextLine().toLowerCase().trim();
             }
-            System.out.print("Please enter an energy source: ");
-            String energy = reader.readLine().toLowerCase();
-            if (energy.equals("exit")) {
-                break;
-            }
 
-            if (CodeFormats.COUN_MAP.containsKey(country)
-                    && (CodeFormats.ENERGY_MAP.containsKey(energy) || energy.trim().equalsIgnoreCase("all"))) {
-                if (energy.trim().equalsIgnoreCase("all")) {
-                    System.out.println("Displaying data for energy production in " + country + ":");
+            System.out.println("If you wish specify an energy type, else press enter");
+            energyType = input.nextLine().toLowerCase().trim();
 
-                    ApiRequest params = ApiRequest.ApiReqForEnergySource(energy, country);
-                    InputStream xml = GetAPIData.sendAPIRequest(params);
-                    XmlView.PrintXMLQuery(XmlQuery.QueryXMLForEnergyValues(xml));
-                } else {
-                    System.out.println("Displaying data for " + energy + " production in " + country + ":");
-
-                    ApiRequest params = ApiRequest.ApiReqForEnergySource(energy, country);
-                    InputStream xml = GetAPIData.sendAPIRequest(params);
-                    XmlView.PrintXMLQuery(XmlQuery.QueryXMLForEnergyValues(xml));
-                }
+            List<String> results;
+            int result;
+            if (!energyType.isEmpty()) {
+                result = JDBCQuery.SqlQuery(country, energyType, DBupdate.dbURL);
+                System.out.println(energyType + " production in country " + country + " equals " + result);
             } else {
-                System.out.println("Invalid input");
+                results = JDBCQuery.SqlQuery(country, DBupdate.dbURL);
+                for (String s : results) {
+                    System.out.println(s);
+                }
             }
-        }*/
+        }
     }
 }
