@@ -9,7 +9,7 @@ public class ResultOfQuery {
      * @param source energy type to be queried
      */
     public ResultOfQuery(String country,String source){
-        updateValue(country, source);
+        updateValue(country.toLowerCase(), source);
     }
 
     /**

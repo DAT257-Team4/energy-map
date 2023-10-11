@@ -14,6 +14,7 @@ let mapContainers = [];
 let activeMapIndex = 0;
 
 let pubBackgroundColor = "rgb(54, 57, 62)";
+let bootstrapColors = {};
 
 let countrySelection = "Europe";
 
@@ -45,6 +46,12 @@ document.addEventListener("DOMContentLoaded", function() {
       toggleTheme();
     }
   }
+
+  const style = getComputedStyle(document.body);
+  bootstrapColors = {
+    textLight: style.getPropertyValue('--bs-light'),
+    textDark: style.getPropertyValue('--bs-dark')
+  };
 });
 
 function toggleTheme() {
@@ -68,6 +75,7 @@ function toggleTheme() {
           element.classList.add('bg-light');
       }
   });
+  drawRegionsMap();
 }
 
 function onSettingsChanged() {
@@ -114,20 +122,23 @@ function drawRegionsMap() {
     datalessRegionColor: "#a6a6a6",
   };
 
+  const themeColor = darkMode ? bootstrapColors.textLight : bootstrapColors.textDark;
   // Options for the piechart
   var optionsPie = {
     title: "Energy types in " + countrySelection,
     titleTextStyle: {
-      color: "white",
+      color: themeColor,
       fontSize: 20,
       bold: true
     },
     pieHole: 0.4,
-    backgroundColor: pubBackgroundColor,
+    backgroundColor: 'transparent',
     legend: {
-      textStyle: {color: 'white'}
+      textStyle: {
+        color: themeColor
+      }
     },
-    pieSliceBorderColor: pubBackgroundColor,
+    pieSliceBorderColor: themeColor
   };
   var piechart = new google.visualization.PieChart(document.getElementById('donutchart'));
   piechart.draw(pieData, optionsPie);
@@ -268,23 +279,26 @@ function sumArrayIndex(arr, startIndex, endIndex) {
 }
 
 function buildTable() {
-  const col = findCol(energyType.value);
+  const colIndex = findCol(energyType.value);
   // if there is no data for the energy type return a table with no data
-  if (col === -1) {
+  if (colIndex === -1) {
     return [[inputData[0][0], "no-data"]];
   }
 
-  const table = [[inputData[0][0], `${inputData[0][col]} [MW]`]];
+  let table = [[inputData[0][0], `${inputData[0][colIndex]} [MW]`]];
   for (let i = 1; i < inputData.length; i++)
   {
-    const value = (scaleSelection.value === "Linear") ? inputData[i][col] : {v: Math.log10(fixID(inputData[i][col])), f: inputData[i][col]};
-    //console.log(value);
-    if (value >= 0)
-    {
+    let rawValue=inputData[i][colIndex];
+    if(rawValue!=-1){
+
+      const value = (scaleSelection.value === "Linear") ? rawValue : {v: Math.log10(rawValue+1), f: rawValue};
+      //console.log(value);
       table.push([inputData[i][0], value]);
+    }else{
+      table.push([inputData[i][0], {v:0, f: "No data"}]);
     }
-    
   }
+  console.log(table);
 
   return table;
 }
