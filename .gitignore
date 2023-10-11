@@ -9,3 +9,5 @@ server/node_modules
 server/node_modules/**
 server/db/energy-production-db
 token.txt
+
+.vscode/launch.json
