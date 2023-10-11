@@ -120,7 +120,7 @@ function drawRegionsMap() {
       fontSize: 30,
       bold: true},
     pieHole: 0.4,
-    backgroundColor: pubBackgroundColor,
+    backgroundColor: 'transparent',
     legend: {textStyle: {color: 'white'}},
     pieSliceBorderColor: pubBackgroundColor,
   };
