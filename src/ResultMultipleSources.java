@@ -9,6 +9,7 @@ public class ResultMultipleSources {
      * @param country The name of the country
      */
     public ResultMultipleSources(String country) {
+        country=country.toLowerCase();
         values=new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
         this.country=country;
         updateValues(country);
