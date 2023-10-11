@@ -102,6 +102,7 @@ function drawRegionsMap() {
   else {
     var pieData = google.visualization.arrayToDataTable(buildTable("Linear"));
   }
+  var renewableBarChartData = google.visualization.arrayToDataTable(divideRenewableAndNot(inputData));
 
   // Options for the map
   var optionsMap = {
@@ -115,19 +116,51 @@ function drawRegionsMap() {
   // Options for the piechart
   var optionsPie = {
     title: countrySelection? countrySelection : "Europe",
-    titleTextStyle: { color: "white",
-      //fontName:,
-      fontSize: 30,
-      bold: true},
+    titleTextStyle: {
+      color: "white",
+      fontSize: 20,
+      bold: true
+    },
     pieHole: 0.4,
     backgroundColor: pubBackgroundColor,
-    legend: {textStyle: {color: 'white'}},
+    legend: {
+      textStyle: {color: 'white'}
+    },
     pieSliceBorderColor: pubBackgroundColor,
   };
+  var piechart = new google.visualization.PieChart(document.getElementById('donutchart'));
+  piechart.draw(pieData, optionsPie);
 
-  var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-  chart.draw(pieData, optionsPie);
 
+  // Options for the barchart
+  var optionsBar = {
+    title: "How clean is Europes energy?",
+    titleTextStyle: { 
+      color: "white",
+      fontSize: 20,
+      bold: true
+    },
+    hAxis: {
+      title: "Production [MW]", 
+      titleTextStyle:{color: 'white'}, 
+      textStyle:{color: 'white'}
+    },
+    vAxis: {
+      textStyle:{color: 'white'}, 
+      textPosition: 'none'
+    },
+    annotations: {
+      textStyle: {
+        bold: true, 
+        fontSize: 13
+      }
+    },
+    backgroundColor: pubBackgroundColor,
+    legend: {position: 'none'}
+  };
+  var barchart = new google.visualization.BarChart(document.getElementById('renewableBarChart'));
+  barchart.draw(renewableBarChartData, optionsBar);
+  
   // Create the map and render it in the specified 
   let prevMapIndex = activeMapIndex;
   activeMapIndex = (activeMapIndex + 1) % mapContainers.length;
@@ -255,7 +288,12 @@ function divideRenewableAndNot(data) {
     "Hydro Water Reservoir", "Marine", "Other renewable", "Solar", "Wind Offshore", "Wind Onshore"];
   let nonRenewable = ["Biomass", "Fossil Brown coal/Lignite", "Fossil Coal-derived gas", 
     "Fossil Gas", "Fossil Hard coal", "Fossil Oil", "Fossil Oil shale", "Fossil Peat", "Nuclear", "Waste", "Other"];
-  let sortedArray = [["Renewable", "Non Renewable"], [0,0]];
+  //let sortedArray = [["Renewable", "Non Renewable"], [0,0]];
+  let sortedArray = [
+    ["Type", "Production [MW]", { role: "style" }, { role: "annotation" }],
+    ["Renewable", 0, "green", "Renewable"], 
+    ["Non Renewable", 0, "red", "Non Renewable"]
+  ]
 
   // Loop through the data and add the values to the appropriate array
   for (var i = 1; i < data.length; i++) {
@@ -263,10 +301,10 @@ function divideRenewableAndNot(data) {
     for (var col = 1; col < row.length; col ++) {
       if (row[col] != -1) {
         if (renewable.includes(data[0][col])) {
-          sortedArray[1][0] += row[col];
+          sortedArray[1][1] += row[col];
         }
         if (nonRenewable.includes(data[0][col])) {
-          sortedArray[1][1] += row[col];
+          sortedArray[2][1] += row[col];
         }
       }
     }
