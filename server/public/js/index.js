@@ -120,22 +120,24 @@ function drawRegionsMap() {
     datalessRegionColor: "#a6a6a6",
   };
 
+  const themeColor = darkMode ? bootstrapColors.textLight : bootstrapColors.textDark;
   // Options for the piechart
   var optionsPie = {
     title: countrySelection? countrySelection : "Europe",
     titleTextStyle: {
-      color: darkMode ? bootstrapColors.textLight : bootstrapColors.textDark,
+      color: themeColor,
       //fontName:,
       fontSize: 30,
-      bold: true},
+      bold: true
+    },
     pieHole: 0.4,
     backgroundColor: 'transparent',
     legend: {
       textStyle: {
-        color: darkMode ? bootstrapColors.textLight : bootstrapColors.textDark
+        color: themeColor
       }
     },
-    pieSliceBorderColor: pubBackgroundColor,
+    pieSliceBorderColor: themeColor
   };
 
   var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
