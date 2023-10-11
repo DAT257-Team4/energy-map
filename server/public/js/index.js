@@ -109,7 +109,7 @@ function drawRegionsMap() {
     var pieData = google.visualization.arrayToDataTable(createPieChartTable(countrySelection));
   }
   else {
-    var pieData = google.visualization.arrayToDataTable(sumProductionPerEnergyType(inputData)/* buildTable("Linear") */);
+    var pieData = google.visualization.arrayToDataTable(sumProductionPerEnergyType(inputData));
   }
   var renewableBarChartData = google.visualization.arrayToDataTable(divideRenewableAndNot(inputData));
 
@@ -148,26 +148,19 @@ function drawRegionsMap() {
   var optionsBar = {
     title: "How clean is Europe's energy?",
     titleTextStyle: { 
-      color: "white",
+      color: themeColor,
       fontSize: 20,
       bold: true
     },
+    backgroundColor: 'transparent',
     hAxis: {
       title: "Production [MW]", 
-      titleTextStyle:{color: 'white'}, 
-      textStyle:{color: 'white'}
+      titleTextStyle:{color: themeColor}, 
+      textStyle:{color: themeColor}
     },
     vAxis: {
-      textStyle:{color: 'white'}, 
-      textPosition: 'none'
+      textStyle:{color: themeColor, fontSize: 13}, 
     },
-    annotations: {
-      textStyle: {
-        bold: true, 
-        fontSize: 13
-      }
-    },
-    backgroundColor: pubBackgroundColor,
     legend: {position: 'none'}
   };
   var barchart = new google.visualization.BarChart(document.getElementById('renewableBarChart'));
@@ -311,9 +304,9 @@ function divideRenewableAndNot(data) {
     "Fossil Gas", "Fossil Hard coal", "Fossil Oil", "Fossil Oil shale", "Fossil Peat", "Nuclear", "Waste", "Other"];
   //let sortedArray = [["Renewable", "Non Renewable"], [0,0]];
   let sortedArray = [
-    ["Type", "Production [MW]", { role: "style" }, { role: "annotation" }],
-    ["Renewable", 0, "green", "Renewable"], 
-    ["Non Renewable", 0, "red", "Non Renewable"]
+    ["Type", "Production [MW]", { role: "style" }],
+    ["Renewable", 0, "green"], 
+    ["Non Renewable", 0, "red"]
   ]
 
   // Loop through the data and add the values to the appropriate array
