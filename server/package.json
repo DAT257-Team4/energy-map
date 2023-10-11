@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rm -r java_results; mkdir java_results;  javac -d java_results/ -sourcepath ../src ../src/*.java",
-    "start": "node ./bin/www",
+    "start": "nodemon ./bin/www",
     "dev": " rm -r java_results; mkdir java_results;  javac -d java_results/ -sourcepath ../src ../src/*.java ; nodemon ./bin/www",
     "dev-win": "rd /s /q java_results & mkdir java_results & javac -d java_results\\ --source-path ..\\src ..\\src\\*.java & nodemon .\\bin\\www",
     "cypress:open": "cypress open"
