@@ -15,7 +15,7 @@ let activeMapIndex = 0;
 
 let pubBackgroundColor = "rgb(54, 57, 62)";
 
-let countrySelection = undefined;
+let countrySelection = "Europe";
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -94,10 +94,10 @@ function drawRegionsMap() {
     }
   });
 
-  //console.log(inputData);
+  console.log(inputData);
   // Convert the input data to a DataTable
   const data = google.visualization.arrayToDataTable(buildTable());
-  if (countrySelection) {
+  if (countrySelection != "Europe") {
     var pieData = google.visualization.arrayToDataTable(createPieChartTable(countrySelection));
   }
   else {
@@ -116,7 +116,7 @@ function drawRegionsMap() {
 
   // Options for the piechart
   var optionsPie = {
-    title: countrySelection? "Energy types in " + countrySelection : "Energy types in Europe",
+    title: "Energy types in " + countrySelection,
     titleTextStyle: {
       color: "white",
       fontSize: 20,
@@ -177,7 +177,7 @@ function drawRegionsMap() {
         console.info("The user selected", countrySelection);
       }
       else {
-        countrySelection = undefined;
+        countrySelection = "Europe";
         console.info("The user selected Europe");
       }
       drawRegionsMap();
