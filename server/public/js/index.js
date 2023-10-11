@@ -94,13 +94,14 @@ function drawRegionsMap() {
     }
   });
 
+  //console.log(inputData);
   // Convert the input data to a DataTable
   const data = google.visualization.arrayToDataTable(buildTable());
   if (countrySelection) {
     var pieData = google.visualization.arrayToDataTable(createPieChartTable(countrySelection));
   }
   else {
-    var pieData = google.visualization.arrayToDataTable(buildTable("Linear"));
+    var pieData = google.visualization.arrayToDataTable(sumProductionPerEnergyType(inputData)/* buildTable("Linear") */);
   }
   var renewableBarChartData = google.visualization.arrayToDataTable(divideRenewableAndNot(inputData));
 
@@ -115,7 +116,7 @@ function drawRegionsMap() {
 
   // Options for the piechart
   var optionsPie = {
-    title: countrySelection? countrySelection : "Europe",
+    title: countrySelection? "Energy types in " + countrySelection : "Energy types in Europe",
     titleTextStyle: {
       color: "white",
       fontSize: 20,
@@ -134,7 +135,7 @@ function drawRegionsMap() {
 
   // Options for the barchart
   var optionsBar = {
-    title: "How clean is Europes energy?",
+    title: "How clean is Europe's energy?",
     titleTextStyle: { 
       color: "white",
       fontSize: 20,
@@ -251,7 +252,13 @@ function removeNoData() {
   return tempArr;
 }
 
-// summs all elements in an array between startIndex and endIndex
+
+/**
+ * Summs all elements in an array between startIndex and endIndex
+ * @param {Array} arr The array to sum
+ * @param {Number} startIndex (Inclusive) The index to start summing from 
+ * @param {Number} endIndex (Exclusive) The index to stop summing at 
+ *  */ 
 function sumArrayIndex(arr, startIndex, endIndex) {
   let sum = 0;
   for (var i = startIndex; i < endIndex; i++) {
@@ -271,7 +278,7 @@ function buildTable() {
   for (let i = 1; i < inputData.length; i++)
   {
     const value = (scaleSelection.value === "Linear") ? inputData[i][col] : {v: Math.log10(fixID(inputData[i][col])), f: inputData[i][col]};
-    console.log(value);
+    //console.log(value);
     if (value >= 0)
     {
       table.push([inputData[i][0], value]);
@@ -313,4 +320,23 @@ function divideRenewableAndNot(data) {
   console.log(sortedArray);
   // Return the arrays
   return sortedArray;
+}
+
+
+function sumProductionPerEnergyType(data) {
+  let result = [];
+  result.push(["Energy Type", "Production [MW]"]);
+  for (var col = 1; col < data[0].length; col++) {
+    let energyType = [data[0][col], 0];
+    for (var row = 1; row < data.length; row++) {
+      if (data[row][col] != -1) {
+        energyType[1] += data[row][col];
+      }
+    }
+    if (energyType[1] != 0) {
+      result.push(energyType);
+    }
+  }
+  console.log(result);
+  return result;
 }
