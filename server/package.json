@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "apt-get update && apt-get install -y build-essential && rm -rf node_modules && rm -r java_results && mkdir java_results && javac -d java_results/ -sourcepath ../src ../src/*.java",
+    "build": "mkdir java_results && javac -d java_results/ -sourcepath ../src ../src/*.java",
     "start": "node ./bin/www",
     "dev": " rm -r java_results; mkdir java_results;  javac -d java_results/ -sourcepath ../src ../src/*.java ; nodemon ./bin/www",
     "dev-win": "rd /s /q java_results & mkdir java_results & javac -d java_results\\ --source-path ..\\src ..\\src\\*.java & nodemon .\\bin\\www",
@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
+    "npm": "^10.2.0",
     "cron": "^2.4.4",
-    "debug": "~2.6.9",
+    "debug": "~4.3.4",
     "ejs": "~3.1.7",
     "express": "~4.18.2",
     "http-errors": "~1.6.3",
