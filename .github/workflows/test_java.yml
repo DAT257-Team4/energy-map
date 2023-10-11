@@ -1,0 +1,30 @@
+name: Java CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Out Code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 13
+
+      - name: Compile Java Code
+        run: javac -cp .:lib/junit-platform-console-standalone-1.10.0.jar -d . *.java
+
+      - name: Run JUnit Tests
+        run: java org.junit.runner.JUnitCore ./test/*.java
