@@ -14,6 +14,7 @@ let mapContainers = [];
 let activeMapIndex = 0;
 
 let pubBackgroundColor = "rgb(54, 57, 62)";
+let bootstrapColors = {};
 
 let countrySelection = undefined;
 
@@ -45,6 +46,12 @@ document.addEventListener("DOMContentLoaded", function() {
       toggleTheme();
     }
   }
+
+  const style = getComputedStyle(document.body);
+  bootstrapColors = {
+    textLight: style.getPropertyValue('--bs-light'),
+    textDark: style.getPropertyValue('--bs-dark')
+  };
 });
 
 function toggleTheme() {
@@ -68,6 +75,7 @@ function toggleTheme() {
           element.classList.add('bg-light');
       }
   });
+  drawRegionsMap();
 }
 
 function onSettingsChanged() {
@@ -115,13 +123,18 @@ function drawRegionsMap() {
   // Options for the piechart
   var optionsPie = {
     title: countrySelection? countrySelection : "Europe",
-    titleTextStyle: { color: "white",
+    titleTextStyle: {
+      color: darkMode ? bootstrapColors.textLight : bootstrapColors.textDark,
       //fontName:,
       fontSize: 30,
       bold: true},
     pieHole: 0.4,
     backgroundColor: 'transparent',
-    legend: {textStyle: {color: 'white'}},
+    legend: {
+      textStyle: {
+        color: darkMode ? bootstrapColors.textLight : bootstrapColors.textDark
+      }
+    },
     pieSliceBorderColor: pubBackgroundColor,
   };
 
