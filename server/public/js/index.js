@@ -228,23 +228,24 @@ function sumArrayIndex(arr, startIndex, endIndex) {
 }
 
 function buildTable() {
-  const col = findCol(energyType.value);
+  const colIndex = findCol(energyType.value);
   // if there is no data for the energy type return a table with no data
-  if (col === -1) {
+  if (colIndex === -1) {
     return [[inputData[0][0], "no-data"]];
   }
 
-  const table = [[inputData[0][0], `${inputData[0][col]} [MW]`]];
+  let table = [[inputData[0][0], `${inputData[0][colIndex]} [MW]`]];
   for (let i = 1; i < inputData.length; i++)
   {
-    const value = (scaleSelection.value === "Linear") ? inputData[i][col] : {v: Math.log10(fixID(inputData[i][col])), f: inputData[i][col]};
-    console.log(value);
-    if (value >= 0)
-    {
+    let rawValue=inputData[i][colIndex];
+    if(rawValue!=-1){
+
+      const value = (scaleSelection.value === "Linear") ? rawValue : {v: Math.log10(rawValue+1), f: rawValue};
+      //console.log(value);
       table.push([inputData[i][0], value]);
     }
-    
   }
+  console.log(table);
 
   return table;
 }
