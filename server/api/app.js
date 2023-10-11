@@ -1,5 +1,5 @@
-var createError = require('http-errors');
 var express = require('express');
+var createError = require('http-errors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -11,8 +11,8 @@ java.classpath.push('java_results');
 java.classpath.push('../lib/sqlite-jdbc-3.43.0.0.jar');
 const dbUpdate = java.import("DBupdate");
 
-var indexRouter = require('routes/index');
-var usersRouter = require('routes/users');
+var indexRouter = require('../routes/index');
+var usersRouter = require('../routes/users');
 var app = express();
 
 // Cron job for updating database
