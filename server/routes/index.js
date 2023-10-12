@@ -16,38 +16,4 @@ router.get('/', function(req, res, next) {
   res.render('index.ejs', { data : JSON.stringify(result) }); 
 });
 
-/*
-router.get('/SolarSweden', function(req, res, next) {
-  let result = queryResult("Sweden", "Solar");
-  console.log(result)
-  res.render('index', { quantity: result.value });
-});
-
-router.get('/generationSweden', function(req, res, next) {
-  let result = new multipleResult("Sweden")
-  console.log(result)
-  res.render('index', { title: result.values }); 
-});
-
-router.get('/fossilGas', function(req, res, next) {
-  let result = queryResult(req.query.source, "Fossil Gas");
-  console.log(result)
-  res.render('index', { title: result.value });
-});
-
-
-router.get('/generation', function(req, res, next) {
-  let result = new multipleResult(req.query.country)
-  console.log(req.query.country)
-  res.render('index', { title: [req.query.country, ...result.values] }); 
-});
-
-
-router.get('/map', function(req, res, next) {
-  let result =[ENERGY_SOURCES, ...(COUNTRY_LIST.map(x =>[x, ...((new multipleResult(x)).values)]))]
-  console.log(result)
-  res.render('index', { title: JSON.stringify(result) }); //(new queryResult()).value } );
-});
-*/
-
 module.exports = router;
