@@ -61,12 +61,17 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - id: string
+        uses: ASzc/change-string-case-action@v5
+        with:
+          string: ${{ env.IMAGE_NAME }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ steps.string.outputs.lowercase }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -75,11 +80,6 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - id: string
-        uses: ASzc/change-string-case-action@v5
-        with:
-          string: ${{ env.IMAGE_NAME }}
 
       - name: Run Docker container
         run: docker run --rm -d ${{ env.REGISTRY }}/${{ steps.string.outputs.lowercase }}
