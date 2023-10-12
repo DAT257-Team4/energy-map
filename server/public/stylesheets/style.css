@@ -36,6 +36,27 @@ html, body {
 /* Fix tooltip flickering */
 svg > g > g.google-visualization-tooltip { pointer-events: none }
 
+main {
+  overflow: hidden;
+}
+
+.sidebar {
+  height: 100%;
+}
+
+.sidebar > .tab-pane {
+  height: 0;
+  overflow: hidden;
+  display: block;
+  visibility: hidden;
+  overflow-y: scroll;
+}
+
+.sidebar > .active {
+  height: 100%;
+  visibility: visible;
+  overflow-x: hidden;
+}
 
 /*
 body {
