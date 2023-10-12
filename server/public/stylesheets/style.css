@@ -36,6 +36,10 @@ html, body {
 /* Fix tooltip flickering */
 svg > g > g.google-visualization-tooltip { pointer-events: none }
 
+main {
+  overflow: hidden;
+}
+
 .sidebar {
   height: 100%;
 }
