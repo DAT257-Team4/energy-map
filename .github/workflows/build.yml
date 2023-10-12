@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [ "dev" ]
 
+permissions:
+  packages: write
+
 jobs:
   test:
     name: Test on node ${{ matrix.node-version }} and ${{ matrix.os }}
