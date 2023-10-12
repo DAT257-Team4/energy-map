@@ -140,6 +140,9 @@ function drawRegionsMap() {
         color: themeColor
       }
     },
+    pieSliceTextStyle: {
+      color: themeColor
+    },
     pieSliceBorderColor: themeColor
   };
   var piechart = new google.visualization.PieChart(document.getElementById('donutchart'));
