@@ -30,9 +30,8 @@ public class Configuration {
         String token = env.get("TOKEN");
         
         // Check if the environmental variable is defined
-        if (token.equals("insert_token") || token == null) {
+        if (token == null || token.equals("insert_token") ) {
             System.out.println("Environmental variable TOKEN is not defined in enviromental variables.");
-            
             return readTokenFromFile();
         }
         
