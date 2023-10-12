@@ -4,9 +4,6 @@ FROM node:18
 # Set the working directory to /app
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
-
 # Update the package lists and install the `build-essential` package in the container.
 RUN apt-get update 
 RUN apt-get install -y build-essential
@@ -16,8 +13,12 @@ RUN apt-get install -y openjdk-17-jdk
 ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64/
 RUN echo $JAVA_HOME
 
+# Copy the current directory contents into the container at /app
+COPY . /app
+
 # Change working directory to /app/server
 WORKDIR /app/server
+RUN rm -r node_modules; echo "Building folder clear"
 
 # Install any needed packages specified in package.json
 RUN npm install
