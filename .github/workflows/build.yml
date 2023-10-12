@@ -72,16 +72,18 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true
+          load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Run Docker container
-        run: docker-compose up -d
+        run: docker run --rm -d ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         env:
           TOKEN: ${{ secrets.TOKEN }}
+
       - name: Check Docker container status
-        run: docker-compose ps
+        run: docker ps
+        
       - name: Exit with success code
         run: exit 0
 
