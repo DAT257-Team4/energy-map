@@ -74,7 +74,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build docker image locally
-        run: docker build -t ${{ steps.string.outputs.lowercase }}
+        run: docker build -t ${{ steps.string.outputs.lowercase }} .
 
       - name: Run Docker container
         run: docker run --rm -d ${{ env.REGISTRY }}/${{ steps.string.outputs.lowercase }}
