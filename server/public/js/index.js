@@ -13,29 +13,31 @@ let darkMode = false;
 let mapContainers = [];
 let activeMapIndex = 0;
 
-let pubBackgroundColor = "rgb(54, 57, 62)";
 let bootstrapColors = {};
 
 let countrySelection = "Europe";
+
+const renewableSources = ["Biomass", "Geothermal", "Hydro Pumped Storage", "Hydro Run-of-river and poundage", "Hydro Water Reservoir", "Marine", "Other renewable", "Solar", "Wind Offshore", "Wind Onshore"];
+const nonRenewableSources = ["Fossil Brown coal/Lignite", "Fossil Coal-derived gas", "Fossil Gas", "Fossil Hard coal", "Fossil Oil", "Fossil Oil shale", "Fossil Peat", "Nuclear", "Waste", "Other"];
 
 
 document.addEventListener("DOMContentLoaded", function() {
   scaleSelection = document.getElementById("colorScale");
   energyTypeSelection = document.getElementById("energyType");
   
-  mapContainers.push(document.getElementById("regions_div_1"));
-  mapContainers.push(document.getElementById("regions_div_2"));
+  mapContainers.push(document.getElementById("map-container-1"));
+  mapContainers.push(document.getElementById("map-container-2"));
 
   scaleSelection.addEventListener("change", onSettingsChanged);
   energyTypeSelection.addEventListener("change", onSettingsChanged);
 
-  window.addEventListener('resize', drawRegionsMap, false);
+  window.addEventListener('resize', drawCharts, false);
 
   google.charts.load("current", {
     packages: ["geochart", "corechart"]
   });
   google.charts.setOnLoadCallback(() => {
-    drawRegionsMap();
+    drawCharts();
   });
 
   themeToggle = document.getElementById("theme-toggle");
@@ -75,21 +77,15 @@ function toggleTheme() {
           element.classList.add('bg-light');
       }
   });
-  drawRegionsMap();
+  drawCharts();
 }
 
 function onSettingsChanged() {
   console.info("Selected:", scaleSelection.value, energyTypeSelection.value);
-  drawRegionsMap();
+  drawCharts();
 }
 
-
-function fixID(n){
-  if(n<0)
-    return 0;
-  return n;
-}
-function drawRegionsMap() {
+function drawCharts() {
   if (!google.visualization) {
     console.error("Google Visualization API not loaded");
     return;
@@ -102,21 +98,18 @@ function drawRegionsMap() {
     }
   });
 
-  console.log(inputData);
   inputData = removeNoData();
-  // Convert the input data to a DataTable
+
+  drawMap();
+  drawPieChart();
+  drawBarChart();
+}
+
+function drawMap() {
   const data = google.visualization.arrayToDataTable(buildTable());
-  if (countrySelection != "Europe") {
-    var pieData = google.visualization.arrayToDataTable(createPieChartTable(countrySelection));
-    var renewableBarChartData = google.visualization.arrayToDataTable(divideRenewableAndNot(createPieChartTable(countrySelection), countrySelection));
-  }
-  else {
-    var pieData = google.visualization.arrayToDataTable(sumProductionPerEnergyType(inputData));
-    var renewableBarChartData = google.visualization.arrayToDataTable(divideRenewableAndNot(inputData, countrySelection));
-  }
 
   // Options for the map
-  var optionsMap = {
+  var mapOptions = {
     dataMode: 'regions',
     region: "150", //europe
     backgroundColor: "#212969",
@@ -124,10 +117,44 @@ function drawRegionsMap() {
     datalessRegionColor: "#a6a6a6",
   };
 
+  // Create the map and render it in the specified 
+  const prevMapIndex = activeMapIndex;
+  activeMapIndex = (activeMapIndex + 1) % mapContainers.length;
+  const map = new google.visualization.GeoChart(mapContainers[activeMapIndex]);
+
+
+  google.visualization.events.addListener(map, 'select', () => {
+    const selection = map.getSelection()[0];
+    if (selection) {
+      if (countrySelection != data.getValue(selection.row, 0)) {
+        countrySelection = data.getValue(selection.row, 0);
+        console.info("The user selected", countrySelection);
+      }
+      else {
+        countrySelection = "Europe";
+        console.info("The user selected Europe");
+      }
+      drawCharts();
+    }
+  });
+
+  mapContainers[activeMapIndex].style.zIndex = -1;
+  map.draw(data, mapOptions);
+  mapContainers[prevMapIndex].style.zIndex = -2;
+}
+
+function drawPieChart() {
   const themeColor = darkMode ? bootstrapColors.textLight : bootstrapColors.textDark;
+
+  const pieChartData = google.visualization.arrayToDataTable(
+    countrySelection === "Europe"
+      ? sumProductionPerEnergyType(inputData)
+      : createPieChartTable(countrySelection)
+  );
+
   // Options for the piechart
-  var optionsPie = {
-    title: "Energy types in " + (countrySelection === "XK" ? "Kosovo" : countrySelection),
+  const pieChartOptions = {
+    title: `Energy types in ${countrySelection === "XK" ? "Kosovo" : countrySelection}`,
     titleTextStyle: {
       color: themeColor,
       fontSize: 20,
@@ -145,12 +172,22 @@ function drawRegionsMap() {
     },
     pieSliceBorderColor: themeColor
   };
-  var piechart = new google.visualization.PieChart(document.getElementById('donutchart'));
-  piechart.draw(pieData, optionsPie);
 
+  const pieChart = new google.visualization.PieChart(document.getElementById('donutchart'));
+  pieChart.draw(pieChartData, pieChartOptions);
+}
+
+function drawBarChart() {
+  const themeColor = darkMode ? bootstrapColors.textLight : bootstrapColors.textDark;
+
+  const renewableBarChartData = google.visualization.arrayToDataTable(
+    countrySelection === "Europe"
+      ? divideRenewableAndNot(inputData, countrySelection)
+      : divideRenewableAndNot(createPieChartTable(countrySelection), countrySelection)
+  );
 
   // Options for the barchart
-  var optionsBar = {
+  var barChartOptions = {
     title: "How clean is " + (countrySelection === "XK" ? "Kosovo" : countrySelection) + "'s energy?",
     titleTextStyle: { 
       color: themeColor,
@@ -169,87 +206,55 @@ function drawRegionsMap() {
     },
     legend: {position: 'none'}
   };
-  var barchart = new google.visualization.BarChart(document.getElementById('renewableBarChart'));
-  barchart.draw(renewableBarChartData, optionsBar);
-  
-  // Create the map and render it in the specified 
-  let prevMapIndex = activeMapIndex;
-  activeMapIndex = (activeMapIndex + 1) % mapContainers.length;
-  const map = new google.visualization.GeoChart(mapContainers[activeMapIndex]);
 
-  function countryClickHandler(){
-    var selection = map.getSelection()[0];
-    // console.log(selection);
-    if (selection) {
-      // console.log(selection.row);
-      if (countrySelection != data.getValue(selection.row, 0)) {
-        countrySelection = data.getValue(selection.row, 0);
-        console.info("The user selected", countrySelection);
-      }
-      else {
-        countrySelection = "Europe";
-        console.info("The user selected Europe");
-      }
-      drawRegionsMap();
-      // alert('The user selected ' + value);
-    }
-  }
-  google.visualization.events.addListener(map, 'select', countryClickHandler);
-
-  mapContainers[activeMapIndex].style.zIndex = -1;
-  map.draw(data, optionsMap);
-  mapContainers[prevMapIndex].style.zIndex = -2;
+  const barChart = new google.visualization.BarChart(document.getElementById('renewableBarChart'));
+  barChart.draw(renewableBarChartData, barChartOptions);
 }
+
 
 // find the column index of the requested energy type
 function findCol(energyType) {
   const energyTypes = inputData[0];
-  const index = energyTypes.indexOf(energyType);
-  if (index === -1) {
+  const colIndex = energyTypes.indexOf(energyType);
+  if (colIndex === -1) {
     console.info(`No data for energy type "${value}"`);
   }
-  return index;
+  return colIndex;
 }
 
 // The `createPieChartTable` function takes a country as input and creates a table of data for a pie chart.
 function createPieChartTable(country) {
+  let table = [];
+
   if (country) {
-    let row = findRow(country);
-    let table = [];
-    for (var i = 0; i < inputData[0].length; i++) {
-      if (inputData[row][i] != -1) {
+    const row = findRow(country);
+    for (let i = 0; i < inputData[0].length; i++) {
+      if (inputData[row][i] !== -1) {
         table.push([inputData[0][i], inputData[row][i]]);
       }
     }
-    console.log(table);
-    return table;
   }
   else {
-    let table = [];
-    table.push([inputData[0][0], inputData[0][col] + " [MW]"]);
-    for (var i = 1; i < inputData.length; i++) {
-      if(inputData[i][col]!=-1){
+    table.push([inputData[0][0], `${inputData[0][col]} [MW]`]);
+    for (let i = 1; i < inputData.length; i++) {
+      if(inputData[i][col] !== -1){
         table.push([inputData[i][0], inputData[i][col]]);
       }
     }
   }
+
+  return table;
 }
 
 function findRow(country) {
-  console.log(country);
-  for (var i = 0; i < inputData.length; i++) {
-    if (inputData[i][0].v) {
-      if (inputData[i][0].v == country) {
-        return i;
-      }
-    }
-    else if (inputData[i][0] == country) {
-      return i;
-    }
+  const rowIndex = inputData.findIndex(row => 
+    row[0] === country || row[0].v === country
+  );
+
+  if (rowIndex === -1) {
+    console.info(`No data for country "${country}"`);
   }
-  // If there is no data return -1
-  console.info("No data for country", "\"" + country + "\"");
-  return -1;
+  return rowIndex;
 }
 
 // removes countries that have no data at all
@@ -257,14 +262,13 @@ function removeNoData() {
   let tempArr = [];
   tempArr[0] = inputData[0];
   let tempArrIndex = 1;
-  for (var i = 1; i < inputData.length; i++) {
-    if (sumArrayIndex(inputData[i], 1, inputData[i].length) != (-inputData[i].length+1)) {
+  for (let i = 1; i < inputData.length; i++) {
+    if (sumArrayIndex(inputData[i], 1, inputData[i].length) !== (-inputData[i].length + 1)) {
       tempArr[tempArrIndex] = inputData[i];
       tempArrIndex++;
     }
   }
   console.info("Removed countries with no data");
-  console.log(inputData);
   return tempArr;
 }
 
@@ -276,11 +280,7 @@ function removeNoData() {
  * @param {Number} endIndex (Exclusive) The index to stop summing at 
  *  */ 
 function sumArrayIndex(arr, startIndex, endIndex) {
-  let sum = 0;
-  for (var i = startIndex; i < endIndex; i++) {
-    sum += arr[i];
-  }
-  return sum;
+  return arr.slice(startIndex, endIndex).reduce((a, b) => a + b);
 }
 
 function buildTable() {
@@ -293,45 +293,36 @@ function buildTable() {
   let table = [[inputData[0][0], `${inputData[0][colIndex]} [MW]`]];
   for (let i = 1; i < inputData.length; i++)
   {
-    let rawValue=inputData[i][colIndex];
-    if(rawValue!=-1){
-
-      const value = (scaleSelection.value === "Linear") ? rawValue : {v: Math.log10(rawValue+1), f: rawValue};
-      //console.log(value);
+    const rawValue = inputData[i][colIndex];
+    if(rawValue !== -1){
+      const value = (scaleSelection.value === "Linear") ? rawValue : { v: Math.log10(rawValue + 1), f: rawValue };
       table.push([inputData[i][0], value]);
-    }else{
-      table.push([inputData[i][0], {v:0, f: "No data"}]);
+    } else {
+      table.push([inputData[i][0], { v: 0, f: "No data" }]);
     }
   }
-  console.log(table);
 
   return table;
 }
 
 // Responsible for dividing the energy data into two categories: renewable and non-renewable.
 function divideRenewableAndNot(data, country) {
-  let renewable = ["Biomass", "Geothermal", "Hydro Pumped Storage", "Hydro Run-of-river and poundage", 
-    "Hydro Water Reservoir", "Marine", "Other renewable", "Solar", "Wind Offshore", "Wind Onshore"];
-  let nonRenewable = ["Fossil Brown coal/Lignite", "Fossil Coal-derived gas", 
-    "Fossil Gas", "Fossil Hard coal", "Fossil Oil", "Fossil Oil shale", "Fossil Peat", "Nuclear", "Waste", "Other"];
-  //let sortedArray = [["Renewable", "Non Renewable"], [0,0]];
   let sortedArray = [
     ["Type", "Production [MW]", { role: "style" }],
     ["Renewable", 0, "green"], 
     ["Non Renewable", 0, "red"]
-  ]
-  console.log(data);
-  console.log(country);
+  ];
+
   // Loop through the data and add the values to the appropriate array
   if (country === "Europe") {
-    for (var i = 1; i < data.length; i++) {
-      let row = data[i];
-      for (var col = 1; col < row.length; col ++) {
-        if (row[col] != -1) {
-          if (renewable.includes(data[0][col])) {
+    for (let i = 1; i < data.length; i++) {
+      const row = data[i];
+      for (let col = 1; col < row.length; col++) {
+        if (row[col] !== -1) {
+          if (renewableSources.includes(data[0][col])) {
             sortedArray[1][1] += row[col];
           }
-          if (nonRenewable.includes(data[0][col])) {
+          else if (nonRenewableSources.includes(data[0][col])) {
             sortedArray[2][1] += row[col];
           }
         }
@@ -339,21 +330,19 @@ function divideRenewableAndNot(data, country) {
     }
   }
   else {
-    for (var i = 1; i < data.length; i++) {
-      let row = data[i];
-      if (row[1] != -1) {
-        if (renewable.includes(row[0])) {
+    for (let i = 1; i < data.length; i++) {
+      const row = data[i];
+      if (row[1] !== -1) {
+        if (renewableSources.includes(row[0])) {
           sortedArray[1][1] += row[1];
         }
-        if (nonRenewable.includes(row[0])) {
+        else if (nonRenewableSources.includes(row[0])) {
           sortedArray[2][1] += row[1];
         }
       }
     }
-  }
+  } 
 
-  console.log(sortedArray);
-  // Return the arrays
   return sortedArray;
 }
 
@@ -361,17 +350,16 @@ function divideRenewableAndNot(data, country) {
 function sumProductionPerEnergyType(data) {
   let result = [];
   result.push(["Energy Type", "Production [MW]"]);
-  for (var col = 1; col < data[0].length; col++) {
+  for (let col = 1; col < data[0].length; col++) {
     let energyType = [data[0][col], 0];
-    for (var row = 1; row < data.length; row++) {
-      if (data[row][col] != -1) {
+    for (let row = 1; row < data.length; row++) {
+      if (data[row][col] !== -1) {
         energyType[1] += data[row][col];
       }
     }
-    if (energyType[1] != 0) {
+    if (energyType[1] > 0) {
       result.push(energyType);
     }
   }
-  console.log(result);
   return result;
 }
