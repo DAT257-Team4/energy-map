@@ -76,8 +76,13 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+      - id: string
+        uses: ASzc/change-string-case-action@v5
+        with:
+          string: ${{ env.IMAGE_NAME }}
+
       - name: Run Docker container
-        run: docker run --rm -d ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        run: docker run --rm -d ${{ env.REGISTRY }}/${{ steps.string.outputs.lowercase }}
         env:
           TOKEN: ${{ secrets.TOKEN }}
 
