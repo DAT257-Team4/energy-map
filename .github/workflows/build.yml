@@ -71,15 +71,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ steps.string.outputs.lowercase }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          load: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build docker image locally
+        run: docker build -t ${{ steps.string.outputs.lowercase }}
 
       - name: Run Docker container
         run: docker run --rm -d ${{ env.REGISTRY }}/${{ steps.string.outputs.lowercase }}
@@ -88,7 +83,16 @@ jobs:
 
       - name: Check Docker container status
         run: docker ps
-        
+          
       - name: Exit with success code
         run: exit 0
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          
 
