@@ -17,6 +17,14 @@ npm install
 npm run dev-win
 ```
 
+### Docker
+The project is also available as a docker image. It can then be run on any computer.
+To build and run it, type:
+```bat
+docker build -t energymap .
+docker run -p 3000:3000 -e TOKEN=<insert-token> energymap
+```
+Dont forget to insert the API key without <>.
 ---
 
 ### Dependencies
