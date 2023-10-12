@@ -1,8 +1,8 @@
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "dev"]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "dev","master" ]
 
 
 env:
@@ -46,21 +46,11 @@ jobs:
   dockertest:
     name: Test Docker image
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: write
+    environment: Preview
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Login to GitHub Packages
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Change image to lowercase name
         id: string
@@ -81,13 +71,3 @@ jobs:
         run: docker run --rm -d ${{ steps.string.outputs.lowercase }}
         env:
           TOKEN: ${{ secrets.TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          
-
