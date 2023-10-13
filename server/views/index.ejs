@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
     
-    <script>let data = '<%- data %>';</script>
+    <script>let dataProd = JSON.parse('<%- dataProd %>'); let dataInst = JSON.parse('<%- dataInst %>');</script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="/js/index.js"></script>
   </head>
@@ -86,7 +86,7 @@
             Country
             <form>
               <label for="energyType">Choose an energyType:</label>
-              <select name="energyType" id="energyType">
+              <select name="energyType" class="form-select" id="energyType">
                 <option value="Biomass">Biomass</option>
                 <option value="Fossil Brown coal/Lignite">Fossil Brown coal/Lignite</option>
                 <option value="Fossil Coal-derived gas">Fossil Coal-derived gas</option>
@@ -111,11 +111,20 @@
             Settings
             <form>
               <label for="colorScale">Chose color scale (tooltip always shows real value):</label>
-              <select name="colorScale" id="colorScale">
+              <select name="colorScale" class="form-select" id="colorScale">
                 <option value="Linear" selected="selected">Linear</option>
                 <option value="Logarithmic">Logarithmic</option>
               </select>
             </form>
+            Type of data
+            <form>
+              <label for="dataType">Select if you want the actual production or the installed capacity:</label>
+              <select name="dataType" class="form-select" id="dataType">
+                <option value="prod" selected="selected">Actual</option>
+                <option value="inst">Installed</option>
+              </select>
+            </form>
+            
             <hr>
             
 

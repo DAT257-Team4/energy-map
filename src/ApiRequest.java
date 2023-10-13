@@ -2,8 +2,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ApiRequest{
-    public final String DOCUMENT_TYPE = "A75";
-    public final String PROCESS_TYPE = "A16";
+    public  String DOCUMENT_TYPE = "A75";
+    public  String PROCESS_TYPE = "A16";
     private String In_Domain;
     private String PsrType;
     private String PeriodStart;
@@ -43,6 +43,9 @@ public class ApiRequest{
         countryName = countryName.toLowerCase();
         countryName.trim().equalsIgnoreCase("all");
 
+        ap.DOCUMENT_TYPE = "A75";
+        ap.PROCESS_TYPE = "A16";
+
 
         ap.In_Domain=CodeFormats.COUN_MAP.get(countryName);
         ap.PsrType=CodeFormats.ENERGY_MAP.get(energyType);
@@ -54,4 +57,25 @@ public class ApiRequest{
         ap.securityToken=Configuration.TOKEN;
         return ap;
     }
+
+    public static ApiRequest ApiReqForInstalledEnergy(String energyType, String countryName){
+        ApiRequest ap = new ApiRequest();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHH00");  
+        countryName = countryName.toLowerCase();
+        countryName.trim().equalsIgnoreCase("all");
+
+        ap.DOCUMENT_TYPE = "A68";
+        ap.PROCESS_TYPE = "A33";
+
+        ap.In_Domain=CodeFormats.COUN_MAP.get(countryName);
+        ap.PsrType=CodeFormats.ENERGY_MAP.get(energyType);
+
+        //API is 1 hour behind and expects time in utc.
+        //subtract 3 hours to correct for api lag and swedish summer time.
+        ap.PeriodStart=dtf.format(LocalDateTime.now().minusHours(5));  // "202309010000" YYYYYMMDD0000
+        ap.PeriodEnd=dtf.format(LocalDateTime.now().minusHours(4));
+        ap.securityToken=Configuration.TOKEN;
+        return ap;
+    }
+
 }

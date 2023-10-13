@@ -8,8 +8,8 @@ public class ResultOfQuery {
      * @param country country to be queried
      * @param source energy type to be queried
      */
-    public ResultOfQuery(String country,String source){
-        updateValue(country.toLowerCase(), source);
+    public ResultOfQuery(String country,String source,String tab){
+        updateValue(country.toLowerCase(), source,tab);
     }
 
     /**
@@ -17,7 +17,7 @@ public class ResultOfQuery {
      * @param country country to be queried
      * @param source energy type to be queried
      */
-    public void updateValue(String country, String source) {
-        value = JDBCQuery.SqlQuery(country.toLowerCase().trim(), source.toLowerCase().trim(), DBupdate.dbURL);
+    public void updateValue(String country, String source,String tab) {
+        value = JDBCQuery.SqlQuery(country.toLowerCase().trim(), source.toLowerCase().trim(), DBupdate.dbURL,tab);
     }
 }

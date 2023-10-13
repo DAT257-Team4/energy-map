@@ -26,10 +26,33 @@ public class DBupdate {
 
             for (String country : countries) {
                 ApiRequest req= ApiRequest.ApiReqForEnergySource("all",country);
+                ApiRequest req2= ApiRequest.ApiReqForInstalledEnergy("all",country);
+                
+                
                 try{
+                    
+                    NodeList l2=XmlQuery.QueryXMLForEnergyValues(XmlQuery.inputStreamToString(GetAPIData.sendAPIRequest(req2)));
+                    int i=0;
+
+                    deletePreviousDataInstalled(country, statement);
+                    while(i<l2.getLength()){
+                        System.out.println(l2.item(i).getTextContent());
+                        Element energyCode = (Element) l2.item(i);
+                        i++;
+                        int totValue = 0;
+                        while(i<l2.getLength() && ((Element) l2.item(i)).getTagName().equals("quantity")){
+                            totValue+= Integer.parseInt((l2.item(i)).getTextContent());
+                            i++;
+                        }
+                        insertValueToDBInstalled(country, CodeFormats.REVERSE_ENERGY_MAP.get(energyCode.getTextContent()),totValue,statement);
+                    
+                    }
+                        
+                        
+                        
                     NodeList listRes=XmlQuery.QueryXMLForEnergyValues(XmlQuery.inputStreamToString(GetAPIData.sendAPIRequest(req)));
                     
-                    int i=0;
+                    i=0;
                     deletePreviousData(country, statement);
                     while(i<listRes.getLength()){
                         Element energyCode = (Element) listRes.item(i);
@@ -73,6 +96,16 @@ public class DBupdate {
             // Execute the SQL query
             statement.execute(createTable);
 
+            String createTable2 = "CREATE TABLE IF NOT EXISTS EnergyInstalled (" +
+            "country TEXT NOT NULL," +
+            "energyType TEXT NOT NULL," +
+            "quantity INT," +
+            "PRIMARY KEY (country, energyType)" +
+            ")";
+
+            // Execute the SQL query
+            statement.execute(createTable2);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -99,6 +132,25 @@ public class DBupdate {
      */
     private static void insertValueToDB(String country, String energySource, int value, Statement statement) throws SQLException{
         String q="REPLACE INTO `EnergyProduction`  VALUES ('"+country+"','"+energySource+"', "+value+")";        
+        statement.executeUpdate(q);
+    }
+
+
+    private static void deletePreviousDataInstalled(String country, Statement statement) throws SQLException {
+        String q = "DELETE FROM `EnergyInstalled`  WHERE Country='"+country+"'";
+        statement.executeUpdate(q);
+    }
+
+    /**
+     * This function execute the query to add the values to the DB
+     * @param country   The country
+     * @param energySource  The energy source name
+     * @param value     The energy production value.
+     * @param statement The statament connection to the DB
+     * @throws SQLException If a database access error occurs
+     */
+    private static void insertValueToDBInstalled(String country, String energySource, int value, Statement statement) throws SQLException{
+        String q="REPLACE INTO `EnergyInstalled`  VALUES ('"+country+"','"+energySource+"', "+value+")";        
         statement.executeUpdate(q);
     }
     

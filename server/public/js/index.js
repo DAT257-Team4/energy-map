@@ -1,11 +1,14 @@
 let scaleSelection;
 let energyTypeSelection;
+let dataSourceSelector;
+let isDataSourceProd=true;
 const countryMappings = {
   'Bosnia and Herz.': 'Bosnia and Herzegovina',
   'North Macedonia': 'Macedonia',
   'Kosovo': {v: 'XK', f: 'Kosovo'}
 };
-let inputData = JSON.parse(data);
+let inputData = dataProd;
+
 
 let themeToggle = document.getElementById("theme-toggle");
 let darkMode = false;
@@ -24,12 +27,14 @@ const nonRenewableSources = ["Fossil Brown coal/Lignite", "Fossil Coal-derived g
 document.addEventListener("DOMContentLoaded", function() {
   scaleSelection = document.getElementById("colorScale");
   energyTypeSelection = document.getElementById("energyType");
+  dataSourceSelector = document.getElementById("dataType");
   
   mapContainers.push(document.getElementById("map-container-1"));
   mapContainers.push(document.getElementById("map-container-2"));
 
   scaleSelection.addEventListener("change", onSettingsChanged);
   energyTypeSelection.addEventListener("change", onSettingsChanged);
+  dataSourceSelector.addEventListener("change", onDataSourceChange);
 
   window.addEventListener('resize', drawCharts, false);
 
@@ -55,6 +60,18 @@ document.addEventListener("DOMContentLoaded", function() {
     textDark: style.getPropertyValue('--bs-dark')
   };
 });
+
+function onDataSourceChange(){
+  isDataSourceProd=!isDataSourceProd;
+  console.log(isDataSourceProd);
+  if(isDataSourceProd){
+    inputDatata=dataProd;
+  }else{
+    inputData=dataInst;
+  }
+  onSettingsChanged();
+}
+
 
 function toggleTheme() {
   darkMode = !darkMode;
