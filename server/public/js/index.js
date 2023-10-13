@@ -20,9 +20,9 @@ let bootstrapColors = {};
 
 let countrySelection = "Europe";
 
-const renewableSources = [ "Geothermal", "Hydro Pumped Storage", "Hydro Run-of-river and poundage", "Hydro Water Reservoir", "Marine", "Other renewable", "Solar", "Wind Offshore", "Wind Onshore"];
+const renewableSources = ["Biomass", "Geothermal", "Hydro Pumped Storage", "Hydro Run-of-river and poundage", "Hydro Water Reservoir", "Marine", "Other renewable", "Solar", "Wind Offshore", "Wind Onshore"];
 const fossileSources = ["Fossil Brown coal/Lignite", "Fossil Coal-derived gas", "Fossil Gas", "Fossil Hard coal", "Fossil Oil", "Fossil Oil shale", "Fossil Peat"];
-const nonRenewableSources = ["Nuclear","Waste","Biomass","Other"]
+const nonRenewableSources = ["Nuclear","Waste","Other"]
 
 document.addEventListener("DOMContentLoaded", function() {
   scaleSelection = document.getElementById("colorScale");
@@ -326,7 +326,7 @@ function divideRenewableAndNot(data, country) {
   let sortedArray = [
     ["Type", "Production [MW]", { role: "style" }],
     ["Renewable", 0, "green"], 
-    ["NonRenewable", 0 ,"blue"],
+    ["Carbon Neutral", 0 ,"blue"],
     ["Fossile", 0, "red"]
   ];
 
