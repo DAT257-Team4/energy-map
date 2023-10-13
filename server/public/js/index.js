@@ -263,7 +263,7 @@ function removeNoData() {
   tempArr[0] = inputData[0];
   let tempArrIndex = 1;
   for (let i = 1; i < inputData.length; i++) {
-    if (sumArrayIndex(inputData[i], 1, inputData[i].length) !== (-inputData[i].length + 1)) {
+    if (sumArrayIndex(inputData[i], 1, inputData[i].length) > 0) {
       tempArr[tempArrIndex] = inputData[i];
       tempArrIndex++;
     }
