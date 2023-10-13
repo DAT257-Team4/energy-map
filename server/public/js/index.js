@@ -17,9 +17,9 @@ let bootstrapColors = {};
 
 let countrySelection = "Europe";
 
-const renewableSources = ["Biomass", "Geothermal", "Hydro Pumped Storage", "Hydro Run-of-river and poundage", "Hydro Water Reservoir", "Marine", "Other renewable", "Solar", "Wind Offshore", "Wind Onshore"];
-const nonRenewableSources = ["Fossil Brown coal/Lignite", "Fossil Coal-derived gas", "Fossil Gas", "Fossil Hard coal", "Fossil Oil", "Fossil Oil shale", "Fossil Peat", "Nuclear", "Waste", "Other"];
-
+const renewableSources = [ "Geothermal", "Hydro Pumped Storage", "Hydro Run-of-river and poundage", "Hydro Water Reservoir", "Marine", "Other renewable", "Solar", "Wind Offshore", "Wind Onshore"];
+const fossileSources = ["Fossil Brown coal/Lignite", "Fossil Coal-derived gas", "Fossil Gas", "Fossil Hard coal", "Fossil Oil", "Fossil Oil shale", "Fossil Peat"];
+const nonRenewableSources = ["Nuclear","Waste","Biomass","Other"]
 
 document.addEventListener("DOMContentLoaded", function() {
   scaleSelection = document.getElementById("colorScale");
@@ -263,7 +263,7 @@ function removeNoData() {
   tempArr[0] = inputData[0];
   let tempArrIndex = 1;
   for (let i = 1; i < inputData.length; i++) {
-    if (sumArrayIndex(inputData[i], 1, inputData[i].length) !== (-inputData[i].length + 1)) {
+    if (sumArrayIndex(inputData[i], 1, inputData[i].length) > 0) {
       tempArr[tempArrIndex] = inputData[i];
       tempArrIndex++;
     }
@@ -310,7 +310,8 @@ function divideRenewableAndNot(data, country) {
   let sortedArray = [
     ["Type", "Production [MW]", { role: "style" }],
     ["Renewable", 0, "green"], 
-    ["Non Renewable", 0, "red"]
+    ["NonRenewable", 0 ,"blue"],
+    ["Fossile", 0, "red"]
   ];
 
   // Loop through the data and add the values to the appropriate array
@@ -322,13 +323,15 @@ function divideRenewableAndNot(data, country) {
           if (renewableSources.includes(data[0][col])) {
             sortedArray[1][1] += row[col];
           }
-          else if (nonRenewableSources.includes(data[0][col])) {
+          else if (fossileSources.includes(data[0][col])) {
             sortedArray[2][1] += row[col];
-          }
+          } else if (nonRenewableSources.includes(data[0][col])) {
+            sortedArray[3][1] += row[col];
         }
       }
     }
   }
+}
   else {
     for (let i = 1; i < data.length; i++) {
       const row = data[i];
@@ -338,10 +341,12 @@ function divideRenewableAndNot(data, country) {
         }
         else if (nonRenewableSources.includes(row[0])) {
           sortedArray[2][1] += row[1];
+        } else if (fossileSources.includes(row[0])) {
+          sortedArray[3][1] += row[1];
         }
       }
     }
-  } 
+  }
 
   return sortedArray;
 }

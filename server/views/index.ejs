@@ -73,17 +73,19 @@
       <aside class="border-start bg-light h-100 z-1 bg bg-light" style="flex-basis: 500px;">
         <div class="tab-content sidebar" id="v-pills-tabContent">
           <div class="container tab-pane fade show active position-relative" id="v-pills-data" role="tabpanel" aria-labelledby="v-pills-data-tab">
+            <h2>Charts</h2>
+
             Click on a country to view a pie chart of the energy types produced in that country. 
             Click on the same country again to return to the chart for all of Europe.
             
             <br><br>
 
             <div id="donutchart" class="position-absolute w-100 "></div>
-            <div id="renewableBarChart" class="position-absolute w-100" style="top: 300px"></div>
+            <div id="renewableBarChart" class="position-absolute w-100" style="top: 350px"></div>
             
           </div>
           <div class="container tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-            Country
+            <h2>Options</h2>
             <form>
               <label for="energyType">Choose an energyType:</label>
               <select name="energyType" class="form-select" id="energyType">
@@ -108,7 +110,6 @@
                 <option value="Other">Other</option>
               </select>
             </form>
-            Settings
             <form>
               <label for="colorScale">Chose color scale (tooltip always shows real value):</label>
               <select name="colorScale" class="form-select" id="colorScale">
@@ -120,7 +121,9 @@
             
 
           </div>
-          <div class="container tab-pane fade" id="v-pills-about" role="tabpanel" aria-labelledby="v-pills-about-tab">About</div>
+          <div class="container tab-pane fade" id="v-pills-about" role="tabpanel" aria-labelledby="v-pills-about-tab">
+            <h2>About us</h2>
+          </div>
         </div>
       </aside>
     </main>
