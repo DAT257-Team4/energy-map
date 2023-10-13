@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
     
-    <script>let data = '<%- data %>';</script>
+    <script>let dataProd = JSON.parse('<%- dataProd %>'); let dataInst = JSON.parse('<%- dataInst %>');</script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="/js/index.js"></script>
   </head>
@@ -50,8 +50,8 @@
     <main class="d-flex flex-grow-1">
       <!-- MAP CONTAINER -->
       <section class="position-relative flex-grow-1 h-100 z-0">
-        <div id="regions_div_1" class="position-absolute w-100 h-100"></div>
-        <div id="regions_div_2" class="position-absolute w-100 h-100"></div>
+        <div id="map-container-1" class="position-absolute w-100 h-100"></div>
+        <div id="map-container-2" class="position-absolute w-100 h-100"></div>
         <div class="position-absolute d-flex flex-column" style="top: 0; right: 0;">
 
           <!-- SIDEBAR TAB BUTTONS -->
@@ -71,19 +71,24 @@
 
       <!-- SIDEBAR -->
       <aside class="border-start bg-light h-100 z-1 bg bg-light" style="flex-basis: 500px;">
-        <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-content sidebar" id="v-pills-tabContent">
           <div class="container tab-pane fade show active position-relative" id="v-pills-data" role="tabpanel" aria-labelledby="v-pills-data-tab">
-            Click on a country to view a pie chart of the energy types produced in that country. <br>
+            <h2>Charts</h2>
+
+            Click on a country to view a pie chart of the energy types produced in that country. 
             Click on the same country again to return to the chart for all of Europe.
+            
+            <br><br>
 
             <div id="donutchart" class="position-absolute w-100 "></div>
+            <div id="renewableBarChart" class="position-absolute w-100" style="top: 350px"></div>
             
           </div>
           <div class="container tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-            Country
+            <h2>Options</h2>
             <form>
               <label for="energyType">Choose an energyType:</label>
-              <select name="energyType" id="energyType">
+              <select name="energyType" class="form-select" id="energyType">
                 <option value="Biomass">Biomass</option>
                 <option value="Fossil Brown coal/Lignite">Fossil Brown coal/Lignite</option>
                 <option value="Fossil Coal-derived gas">Fossil Coal-derived gas</option>
@@ -105,19 +110,96 @@
                 <option value="Other">Other</option>
               </select>
             </form>
-            Settings
             <form>
               <label for="colorScale">Chose color scale (tooltip always shows real value):</label>
-              <select name="colorScale" id="colorScale">
+              <select name="colorScale" class="form-select" id="colorScale">
                 <option value="Linear" selected="selected">Linear</option>
                 <option value="Logarithmic">Logarithmic</option>
               </select>
             </form>
+            Type of data
+            <form>
+              <label for="dataType">Select if you want the actual production or the installed capacity:</label>
+              <select name="dataType" class="form-select" id="dataType">
+                <option value="prod" selected="selected">Actual</option>
+                <option value="inst">Installed</option>
+              </select>
+            </form>
+            
             <hr>
             
 
           </div>
-          <div class="container tab-pane fade" id="v-pills-about" role="tabpanel" aria-labelledby="v-pills-about-tab">About</div>
+          <div class="container tab-pane fade" id="v-pills-about" role="tabpanel" aria-labelledby="v-pills-about-tab">
+            <h2>About Us</h2>
+            <p>
+              Welcome to the team behind the innovative project that is reshaping how we visualize energy production 
+              across Europe. Our dedicated group of eight individuals, with a shared passion for sustainability and 
+              technology, has come together to make a positive impact on the world.
+            </p>
+            <h4>Meet the Team</h4>
+            <ul>
+              <li>Emil Reinfeldt</li>
+              <li>Nik Erlandsson</li>
+              <li>Elias Haqiqat</li>
+              <li>Ismail Cebi</li>
+              <li>Andreas Nilsson</li>
+              <li>Olof Forsberg</li>
+              <li>Matteo Canton</li>
+              <li>Basem Ali</li>
+            </ul>
+            <h4>Our Mission</h4>
+            <p>
+              Our project centers around the creation of an interactive map designed to showcase energy production across 
+              Europe. This map isn't just a static image; it's a dynamic tool that empowers users to explore, discover, 
+              and understand the energy landscape of this diverse continent.
+            </p>
+            <h4>Key Features</h4>
+            <ul>
+              <li>
+                Interactive Interface: Our map allows users to click on specific countries or regions to access detailed 
+                information about local energy production. From the amount of energy derived from fossil fuels to the 
+                percentage of renewable sources, our map provides a comprehensive view of Europe's energy mix.
+              </li>
+              <li>
+                Real-Time Data: We source our data through the <a href="https://transparency.entsoe.eu/">ENTOS-E Transparancy Platform API</a>, 
+                ensuring that the information presented on our map is always accurate and up-to-date. Keeping our finger on the pulse of energy 
+                production trends is a vital part of our commitment to delivering valuable insights.
+              </li>
+            </ul>
+            <h4>Sustainable Goals</h4>
+            <p>
+              At the heart of our project are four key sustainable development goals:
+            </p>
+            <ul>
+              <li>
+                Quality Education (Goal 4): We believe that knowledge is the foundation of change. By providing accessible and 
+                engaging information about energy production, we're contributing to a more informed and empowered society.
+              </li>
+              <li>
+                Affordable and Clean Energy (Goal 7): Our project promotes clean energy sources, and we're dedicated to raising 
+                awareness about the importance of a sustainable and affordable energy supply.
+              </li>
+              <li>
+                Responsible Consumption and Production (Goal 12): We support responsible energy consumption and production 
+                practices by providing transparent information and advocating for more sustainable choices.
+              </li>
+              <li>
+                Climate Action (Goal 13): Climate change is a global challenge, and our project aims to combat it by offering 
+                insights into the energy sector, a key player in climate change mitigation.
+              </li>
+            </ul>
+            <h4>Join Us in the Energy Revolution</h4>
+            <p>
+              We invite you to explore our map, share in our commitment to sustainability, and join us in the energy revolution. 
+              Our team is thrilled to be at the forefront of this exciting project, and we look forward to making a difference together.
+            </p>
+            <p>
+              Thank you for being part of our journey.
+              <br>Sincerely,
+              <br>The Energy Visualization Team
+            </p>
+          </div>
         </div>
       </aside>
     </main>

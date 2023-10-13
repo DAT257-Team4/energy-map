@@ -10,7 +10,7 @@ public class JDBCQuery {
      * @param url the path to the database
      * @return an array list with all energy and quantity values associated with the country
      */
-    public static List<String> SqlQuery(String country, String url) {
+    public static List<String> SqlQuery(String country, String url,String table) {
         Connection connection = null;
         List<String> results = new ArrayList<>();
         try {
@@ -25,7 +25,7 @@ public class JDBCQuery {
                 // Create a statement object
                 Statement statement = connection.createStatement();
 
-                String queryTable = "SELECT energyType, quantity FROM EnergyProduction WHERE country = '" + country + "'";
+                String queryTable = "SELECT energyType, quantity FROM "+table+" WHERE country = '" + country + "'";
 
                 ResultSet rs = statement.executeQuery(queryTable);
 
@@ -71,7 +71,7 @@ public class JDBCQuery {
      * @param url the location of the database
      * @return the quantity of a single energytype produced by the country
      */
-    public static int SqlQuery(String country, String energyType, String url) {
+    public static int SqlQuery(String country, String energyType, String url,String table) {
         Connection connection = null;
         int quantity = -1;
         try {
@@ -86,7 +86,7 @@ public class JDBCQuery {
                 // Create a statement object
                 Statement statement = connection.createStatement();
 
-                String queryTable = "SELECT quantity FROM EnergyProduction WHERE country = '" + country + "' " +
+                String queryTable = "SELECT quantity FROM EnergyProduction "+table+" WHERE country = '" + country + "' " +
                         "AND energyType = '" + energyType + "'";
 
                 ResultSet rs = statement.executeQuery(queryTable);
