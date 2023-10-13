@@ -65,7 +65,7 @@ function onDataSourceChange(){
   isDataSourceProd=!isDataSourceProd;
   console.log(isDataSourceProd);
   if(isDataSourceProd){
-    inputDatata=dataProd;
+    inputData=dataProd;
   }else{
     inputData=dataInst;
   }
