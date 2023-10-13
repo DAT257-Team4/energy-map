@@ -2,26 +2,24 @@ name: Java CI
 
 on:
   push:
-    branches:
-      - main
-      - dev
+    branches: [ "dev", "master" ]
   pull_request:
-    branches:
-      - main
-      - dev
+    branches: [ "dev", "master" ]
 
 jobs:
   test:
+    name: Test on java
     runs-on: ubuntu-latest
 
     steps:
       - name: Check Out Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: 13
+          java-version: 17
+          distribution: adopt
 
       - name: Compile Java Code
         run: javac -cp .:lib/junit-platform-console-standalone-1.10.0.jar -d . *.java
