@@ -36,7 +36,6 @@ public class DBupdate {
 
                     deletePreviousDataInstalled(country, statement);
                     while(i<l2.getLength()){
-                        System.out.println(l2.item(i).getTextContent());
                         Element energyCode = (Element) l2.item(i);
                         i++;
                         int totValue = 0;

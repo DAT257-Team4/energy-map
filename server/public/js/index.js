@@ -63,9 +63,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function onDataSourceChange(){
   isDataSourceProd=!isDataSourceProd;
-  console.log(isDataSourceProd);
   if(isDataSourceProd){
-    inputDatata=dataProd;
+    inputData=dataProd;
   }else{
     inputData=dataInst;
   }
@@ -98,13 +97,13 @@ function toggleTheme() {
 }
 
 function onSettingsChanged() {
-  console.info("Selected:", scaleSelection.value, energyTypeSelection.value);
+  //console.info("Selected:", scaleSelection.value, energyTypeSelection.value);
   drawCharts();
 }
 
 function drawCharts() {
   if (!google.visualization) {
-    console.error("Google Visualization API not loaded");
+    //console.error("Google Visualization API not loaded");
     return;
   }
 
@@ -145,11 +144,11 @@ function drawMap() {
     if (selection) {
       if (countrySelection != data.getValue(selection.row, 0)) {
         countrySelection = data.getValue(selection.row, 0);
-        console.info("The user selected", countrySelection);
+        //console.info("The user selected", countrySelection);
       }
       else {
         countrySelection = "Europe";
-        console.info("The user selected Europe");
+        //console.info("The user selected Europe");
       }
       drawCharts();
     }
