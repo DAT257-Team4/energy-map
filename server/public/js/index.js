@@ -1,11 +1,14 @@
 let scaleSelection;
 let energyTypeSelection;
+let dataSourceSelector;
+let isDataSourceProd=true;
 const countryMappings = {
   'Bosnia and Herz.': 'Bosnia and Herzegovina',
   'North Macedonia': 'Macedonia',
   'Kosovo': {v: 'XK', f: 'Kosovo'}
 };
-let inputData = JSON.parse(data);
+let inputData = dataProd;
+
 
 let themeToggle = document.getElementById("theme-toggle");
 let darkMode = false;
@@ -24,12 +27,14 @@ const nonRenewableSources = ["Nuclear","Waste","Biomass","Other"]
 document.addEventListener("DOMContentLoaded", function() {
   scaleSelection = document.getElementById("colorScale");
   energyTypeSelection = document.getElementById("energyType");
+  dataSourceSelector = document.getElementById("dataType");
   
   mapContainers.push(document.getElementById("map-container-1"));
   mapContainers.push(document.getElementById("map-container-2"));
 
   scaleSelection.addEventListener("change", onSettingsChanged);
   energyTypeSelection.addEventListener("change", onSettingsChanged);
+  dataSourceSelector.addEventListener("change", onDataSourceChange);
 
   window.addEventListener('resize', drawCharts, false);
 
@@ -56,6 +61,17 @@ document.addEventListener("DOMContentLoaded", function() {
   };
 });
 
+function onDataSourceChange(){
+  isDataSourceProd=!isDataSourceProd;
+  if(isDataSourceProd){
+    inputData=dataProd;
+  }else{
+    inputData=dataInst;
+  }
+  onSettingsChanged();
+}
+
+
 function toggleTheme() {
   darkMode = !darkMode;
 
@@ -81,13 +97,13 @@ function toggleTheme() {
 }
 
 function onSettingsChanged() {
-  console.info("Selected:", scaleSelection.value, energyTypeSelection.value);
+  //console.info("Selected:", scaleSelection.value, energyTypeSelection.value);
   drawCharts();
 }
 
 function drawCharts() {
   if (!google.visualization) {
-    console.error("Google Visualization API not loaded");
+    //console.error("Google Visualization API not loaded");
     return;
   }
 
@@ -128,11 +144,11 @@ function drawMap() {
     if (selection) {
       if (countrySelection != data.getValue(selection.row, 0)) {
         countrySelection = data.getValue(selection.row, 0);
-        console.info("The user selected", countrySelection);
+        //console.info("The user selected", countrySelection);
       }
       else {
         countrySelection = "Europe";
-        console.info("The user selected Europe");
+        //console.info("The user selected Europe");
       }
       drawCharts();
     }

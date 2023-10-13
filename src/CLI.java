@@ -32,10 +32,10 @@ public class CLI {
             List<String> results;
             int result;
             if (!energyType.isEmpty()) {
-                result = JDBCQuery.SqlQuery(country, energyType, DBupdate.dbURL);
+                result = JDBCQuery.SqlQuery(country, energyType, DBupdate.dbURL,"InstalledProduction");
                 System.out.println(energyType + " production in country " + country + " equals " + result);
             } else {
-                results = JDBCQuery.SqlQuery(country, DBupdate.dbURL);
+                results = JDBCQuery.SqlQuery(country, DBupdate.dbURL,"InstalledProduction");
                 for (String s : results) {
                     System.out.println(s);
                 }

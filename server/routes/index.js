@@ -11,9 +11,10 @@ let COUNTRY_LIST=["Albania","Armenia","Austria","Azerbaijan","Belarus","Belgium"
     parameter for index.ejs file: data 
 */
 router.get('/', function(req, res, next) {
-  let result =[[ "Country", ...ENERGY_SOURCES], ...(COUNTRY_LIST.map(x =>[x, ...((new multipleResult(x)).values)]))];
-  console.log(result)
-  res.render('index.ejs', { data : JSON.stringify(result) }); 
+  let resultProd =[[ "Country", ...ENERGY_SOURCES], ...(COUNTRY_LIST.map(x =>[x, ...((new multipleResult(x,"EnergyProduction")).values)]))];
+  let resInstalled= [[ "Country", ...ENERGY_SOURCES], ...(COUNTRY_LIST.map(x =>[x, ...((new multipleResult(x,"EnergyInstalled")).values)]))];
+  //console.log(result)
+  res.render('index.ejs', { dataProd : JSON.stringify(resultProd),dataInst : JSON.stringify(resInstalled) }); 
 });
 
 module.exports = router;
