@@ -1,0 +1,25 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ "dev", "master" ]
+  pull_request:
+    branches: [ "dev", "master" ]
+
+jobs:
+  test:
+    name: Test on java
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Out Code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: adopt
+
+      - name: Run JUnit Tests
+        run: java -jar lib/junit-platform-console-standalone-1.10.0.jar --class-path . --scan-classpath
